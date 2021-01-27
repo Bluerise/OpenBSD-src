@@ -110,6 +110,9 @@ vioscsi*	at virtio?
 simplefb*	at fdt?
 wsdisplay*	at simplefb?
 
+# Apple
+aplpmgr*	at fdt?
+
 # iMX
 imxccm*		at fdt? early 1
 imxiomuxc*	at fdt? early 1

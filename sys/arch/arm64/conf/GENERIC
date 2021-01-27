@@ -126,6 +126,9 @@ amdgpu*		at pci?
 drm*		at amdgpu?
 wsdisplay*	at amdgpu?
 
+# Apple
+aplpmgr*	at fdt?
+
 # iMX
 imxccm*		at fdt? early 1
 imxiomuxc*	at fdt? early 1

@@ -3,6 +3,10 @@
 # Config file and device description for machine-independent FDT code.
 # Included by ports that need it.
 
+device	aplpmgr
+attach	aplpmgr at fdt
+file	dev/fdt/aplpmgr.c		aplpmgr
+
 device	pinctrl
 attach	pinctrl at fdt
 file	dev/fdt/pinctrl.c		pinctrl
