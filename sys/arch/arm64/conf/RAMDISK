@@ -111,6 +111,7 @@ simplefb*	at fdt?
 wsdisplay*	at simplefb?
 
 # Apple
+apldwusb*	at fdt?
 aplpmgr*	at fdt?
 
 # iMX

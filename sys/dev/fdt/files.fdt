@@ -3,6 +3,10 @@
 # Config file and device description for machine-independent FDT code.
 # Included by ports that need it.
 
+device	apldwusb: fdt
+attach	apldwusb at fdt
+file	dev/fdt/apldwusb.c		apldwusb
+
 device	aplpmgr
 attach	aplpmgr at fdt
 file	dev/fdt/aplpmgr.c		aplpmgr

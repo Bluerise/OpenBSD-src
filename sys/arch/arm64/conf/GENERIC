@@ -127,6 +127,7 @@ drm*		at amdgpu?
 wsdisplay*	at amdgpu?
 
 # Apple
+apldwusb*	at fdt?
 aplpmgr*	at fdt?
 
 # iMX
