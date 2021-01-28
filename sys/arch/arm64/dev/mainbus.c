@@ -145,6 +145,8 @@ mainbus_attach(struct device *parent, struct device *self, void *aux)
 		    sc->sc_rangeslen);
 	}
 
+	delay(4000000);
+
 	mainbus_attach_apm(self);
 
 	/* Scan the whole tree. */

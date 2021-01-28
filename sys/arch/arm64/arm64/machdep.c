@@ -917,6 +917,8 @@ initarm(struct arm64_bootparams *abp)
 
 	arm64_bs_tag._space_map = map_func_save;
 
+	printf("Hello, World!\n");
+
 	/* Remap EFI runtime. */
 	if (mmap_start != 0 && system_table != 0)
 		remap_efi_runtime(system_table);
@@ -961,6 +963,8 @@ initarm(struct arm64_bootparams *abp)
 		paddr_t start, end;
 		int i;
 
+		printf("memstart = 0x%lx, memend = 0x%lx\n", memstart, memend);
+
 		node = fdt_find_node("/memory");
 		if (node == NULL)
 			panic("%s: no memory specified", __func__);
@@ -971,8 +975,14 @@ initarm(struct arm64_bootparams *abp)
 			if (reg.size == 0)
 				continue;
 
+			printf("reg %llx/%llx\n", reg.addr, reg.size);
+
 			start = reg.addr;
 			end = MIN(reg.addr + reg.size, (paddr_t)-PAGE_SIZE);
+			if (start < 0x803404000)
+				start = 0x803404000;
+			if (end > 0x9d0000000)
+				end = 0x9d0000000;
 
 			/*
 			 * The intial 64MB block is not excluded, so we need

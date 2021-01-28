@@ -50,6 +50,18 @@
 	.text
 	.globl _start
 _start:
+	b	realstart
+	nop
+	.quad	0
+	.quad	_end - _start
+	.quad	0xa
+	.quad	0
+	.quad	0
+	.quad	0
+	.long	0x644d5241
+	.long	0
+
+realstart:	
 	mov x21, x0
 	mov x22, x1
 	mov x23, x2
