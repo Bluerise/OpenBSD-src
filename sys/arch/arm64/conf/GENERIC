@@ -129,6 +129,7 @@ wsdisplay*	at amdgpu?
 # Apple
 apldwusb*	at fdt?
 aplpmgr*	at fdt?
+exuart*		at fdt?
 
 # iMX
 imxccm*		at fdt? early 1

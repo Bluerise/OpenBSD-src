@@ -108,6 +108,7 @@ int exuart_intr(void *);
 
 /* XXX - we imitate 'com' serial ports and take over their entry points */
 /* XXX: These belong elsewhere */
+cdev_decl(com);
 cdev_decl(exuart);
 
 struct cfdriver exuart_cd = {
@@ -179,13 +180,14 @@ exuart_attach(struct device *parent, struct device *self, void *aux)
 	    0, &sc->sc_ioh))
 		panic("%s: bus_space_map failed!", __func__);
 
-	if (stdout_node == faa->fa_node) {
+	if (faa->fa_reg[0].addr == exuartconsaddr) {
 		/* Locate the major number. */
 		for (maj = 0; maj < nchrdev; maj++)
 			if (cdevsw[maj].d_open == exuartopen)
 				break;
 		cn_tab->cn_dev = makedev(maj, sc->sc_dev.dv_unit);
 
+		SET(sc->sc_hwflags, COM_HW_CONSOLE);
 		printf(": console");
 	}
 
@@ -874,8 +876,6 @@ exuart_sc(dev_t dev)
 void
 exuartcnprobe(struct consdev *cp)
 {
-	cp->cn_dev = makedev(12 /* XXX */, 0);
-	cp->cn_pri = CN_MIDPRI;
 }
 
 void
@@ -890,13 +890,21 @@ exuartcnattach(bus_space_tag_t iot, bus_addr_t iobase, int rate, tcflag_t cflag)
 		NULL, NULL, exuartcngetc, exuartcnputc, exuartcnpollc, NULL,
 		NODEV, CN_MIDPRI
 	};
+	int maj;
 
 	if (bus_space_map(iot, iobase, 0x100, 0, &exuartconsioh))
 		return ENOMEM;
 
+	/* Look for major of com(4) to replace. */
+	for (maj = 0; maj < nchrdev; maj++)
+		if (cdevsw[maj].d_open == comopen)
+			break;
+	if (maj == nchrdev)
+		return ENXIO;
+
 	cn_tab = &exuartcons;
-	cn_tab->cn_dev = makedev(12 /* XXX */, 0);
-	cdevsw[12] = exuartdev; 	/* KLUDGE */
+	cn_tab->cn_dev = makedev(maj, 0);
+	cdevsw[maj] = exuartdev; 	/* KLUDGE */
 
 	exuartconsiot = iot;
 	exuartconsaddr = iobase;
