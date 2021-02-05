@@ -19,6 +19,7 @@
 #include <sys/systm.h>
 #include <sys/timetc.h>
 #include <sys/malloc.h>
+#include <sys/atomic.h>
 
 #include <dev/clock_subr.h>
 #include <machine/cpu.h>
@@ -41,6 +42,7 @@ void arm_dflt_setipl(int);
 
 void arm_dflt_intr(void *);
 void arm_cpu_intr(void *);
+void arm_cpu_fiq(void *);
 
 #define SI_TO_IRQBIT(x) (1 << (x))
 uint32_t arm_smask[NIPL];
@@ -53,16 +55,28 @@ struct arm_intr_func arm_intr_func = {
 };
 
 void (*arm_intr_dispatch)(void *) = arm_dflt_intr;
+void (*arm_fiq_dispatch)(void *) = arm_dflt_intr;
 
 void
 arm_cpu_intr(void *frame)
 {
 	struct cpu_info	*ci = curcpu();
 
-	ci->ci_idepth++;
+	atomic_inc_int(&ci->ci_idepth);
 	(*arm_intr_dispatch)(frame);
+	atomic_dec_int(&ci->ci_idepth);
+}
+
+void
+arm_cpu_fiq(void *frame)
+{
+	struct cpu_info	*ci = curcpu();
+
+	ci->ci_idepth++;
+	(*arm_fiq_dispatch)(frame);
 	ci->ci_idepth--;
 }
+
 void
 arm_dflt_intr(void *frame)
 {
@@ -670,14 +684,16 @@ arm_do_pending_intr(int pcpl)
 }
 
 void arm_set_intr_handler(int (*raise)(int), int (*lower)(int),
-    void (*x)(int), void (*setipl)(int),
-	void (*intr_handle)(void *))
+    void (*x)(int), void (*setipl)(int), void (*intr_handle)(void *),
+    void (*fiq_handle)(void *))
 {
 	arm_intr_func.raise		= raise;
 	arm_intr_func.lower		= lower;
 	arm_intr_func.x			= x;
 	arm_intr_func.setipl		= setipl;
 	arm_intr_dispatch		= intr_handle;
+	if (fiq_handle != NULL)
+		arm_fiq_dispatch	= fiq_handle;
 }
 
 void

@@ -61,7 +61,7 @@ __asm__ (".text;"						\
 #ifdef _KERNEL
 // Change this to dair read/set, then restore.
 #define MCOUNT_ENTER						\
-__asm__ ("mrs %x0,daif; msr daifset, #0x2": "=r"(s));
+__asm__ ("mrs %x0,daif; msr daifset, #0x3": "=r"(s));
 #define	MCOUNT_EXIT						\
 __asm__ ("msr daif, %x0":: "r"(s));
 	

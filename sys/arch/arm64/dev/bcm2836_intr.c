@@ -211,7 +211,8 @@ bcm_intc_attach(struct device *parent, struct device *self, void *aux)
 
 	/* insert self as interrupt handler */
 	arm_set_intr_handler(bcm_intc_splraise, bcm_intc_spllower,
-	    bcm_intc_splx, bcm_intc_setipl, bcm_intc_irq_handler);
+	    bcm_intc_splx, bcm_intc_setipl, bcm_intc_irq_handler,
+	    NULL);
 
 	sc->sc_intc.ic_node = faa->fa_node;
 	sc->sc_intc.ic_cookie = sc;

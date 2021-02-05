@@ -87,8 +87,8 @@ void	 splx(int);
 
 void	 arm_do_pending_intr(int);
 void	 arm_set_intr_handler(int (*raise)(int), int (*lower)(int),
-    void (*x)(int), void (*setipl)(int),
-    void (*intr_handle)(void *));
+    void (*x)(int), void (*setipl)(int), void (*intr_handle)(void *),
+    void (*fiq_handle)(void *));
 
 struct arm_intr_handle {
 	struct interrupt_controller *ih_ic;

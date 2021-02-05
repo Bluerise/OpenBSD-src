@@ -273,13 +273,13 @@ restore_daif(uint32_t daif)
 static __inline void
 enable_irq_daif()
 {
-	__asm volatile ("msr daifclr, #2");
+	__asm volatile ("msr daifclr, #3");
 }
 
 static __inline void
 disable_irq_daif()
 {
-	__asm volatile ("msr daifset, #2");
+	__asm volatile ("msr daifset, #3");
 }
 
 static __inline uint32_t
@@ -287,7 +287,7 @@ disable_irq_daif_ret()
 {
 	uint32_t daif;
 	__asm volatile ("mrs %x0, daif": "=r"(daif));
-	__asm volatile ("msr daifset, #2");
+	__asm volatile ("msr daifset, #3");
 	return daif;
 }
 

@@ -302,7 +302,7 @@ ampintc_attach(struct device *parent, struct device *self, void *aux)
 
 	/* insert self as interrupt handler */
 	arm_set_intr_handler(ampintc_splraise, ampintc_spllower, ampintc_splx,
-	    ampintc_setipl, ampintc_irq_handler);
+	    ampintc_setipl, ampintc_irq_handler, NULL);
 
 #ifdef MULTIPROCESSOR
 	/* setup IPI interrupts */

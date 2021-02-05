@@ -32,7 +32,11 @@
 
 	.text
 
-.macro	save_registers el
+.macro	save_registers el, fiq
+.if \fiq == 0
+	/* must block FIQ in block save for IRQ or x18 may be corrupted */
+	msr	daifset, #1
+.endif
 .if \el == 1
 	mov	x18, sp
 	sub	sp, sp, #128
@@ -64,11 +68,14 @@
 	stp	x18, lr, [sp, #(TF_SP)]
 	mrs	x18, tpidr_el1
 	add	x29, sp, #(TF_SIZE)
+.if \fiq == 0
+	msr	daifclr, #1
+.endif
 .endm
 
 .macro	restore_registers el
 .if \el == 1
-	msr	daifset, #2
+	msr	daifset, #3
 	/*
 	 * Disable interrupts, x18 may change in the interrupt exception
 	 * handler.  For EL0 exceptions, do_ast already did this.
@@ -116,7 +123,7 @@
 	/* Disable interrupts */
 	mrs	x19, daif
 1:
-	msr	daifset, #2
+	msr	daifset, #3
 
 	/* Check for astpending */
 	mrs	x18, tpidr_el1
@@ -158,7 +165,7 @@
 	.globl handle_el1h_sync
 	.type handle_el1h_sync,@function
 handle_el1h_sync:
-	save_registers 1
+	save_registers 1, 0
 	mov	x0, sp
 	bl	do_el1h_sync
 	restore_registers 1
@@ -169,9 +176,20 @@ handle_el1h_sync:
 	.globl handle_el1h_irq
 	.type handle_el1h_irq,@function
 handle_el1h_irq:
-	save_registers 1
+	save_registers 1, 0
 	mov	x0, sp
 	bl	arm_cpu_intr
+	restore_registers 1
+	eret
+	dsb nsh
+	isb
+
+	.globl handle_el1h_fiq
+	.type handle_el1h_fiq,@function
+handle_el1h_fiq:
+	save_registers 1, 1
+	mov	x0, sp
+	bl	arm_cpu_fiq
 	restore_registers 1
 	eret
 	dsb nsh
@@ -193,7 +211,7 @@ handle_el1h_error:
 	.globl handle_el0_sync
 	.type handle_el0_sync,@function
 handle_el0_sync:
-	save_registers 0
+	save_registers 0, 0
 	disable_ss
 	mov	x0, sp
 	bl	do_el0_sync
@@ -206,7 +224,7 @@ handle_el0_sync:
 	.globl handle_el0_irq
 	.type handle_el0_irq,@function
 handle_el0_irq:
-	save_registers 0
+	save_registers 0, 0
 	disable_ss
 	bl	_C_LABEL(vfp_save)
 	mov	x0, sp
@@ -217,10 +235,24 @@ handle_el0_irq:
 	restore_registers 0
 	return
 
+	.globl handle_el0_fiq
+	.type handle_el0_fiq,@function
+handle_el0_fiq:
+	save_registers 0, 0
+	disable_ss
+	bl	_C_LABEL(vfp_save)
+	mov	x0, sp
+	bl	arm_cpu_fiq
+	do_ast
+	bl	_C_LABEL(vfp_enable)
+	allow_ss
+	restore_registers 0
+	return
+
 	.globl handle_el0_error
 	.type handle_el0_error,@function
 handle_el0_error:
-	save_registers 0
+	save_registers 0, 0
 	disable_ss
 	mov	x0, sp
 	bl	do_el0_error
@@ -253,7 +285,7 @@ exception_vectors:
 
 	vector el1h_sync	/* Synchronous EL1h */
 	vector el1h_irq		/* IRQ EL1h */
-	vempty			/* FIQ EL1h */
+	vector el1h_fiq		/* FIQ EL1h */
 	vector el1h_error	/* Error EL1h */
 
 	vempty			/* Synchronous 64-bit EL0 */

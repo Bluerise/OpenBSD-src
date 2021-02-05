@@ -515,7 +515,7 @@ agintc_attach(struct device *parent, struct device *self, void *aux)
 
 	/* insert self as interrupt handler */
 	arm_set_intr_handler(agintc_splraise, agintc_spllower, agintc_splx,
-	    agintc_setipl, agintc_irq_handler);
+	    agintc_setipl, agintc_irq_handler, NULL);
 
 	/* enable interrupts */
 	ctrl = bus_space_read_4(sc->sc_iot, sc->sc_d_ioh, GICD_CTLR);

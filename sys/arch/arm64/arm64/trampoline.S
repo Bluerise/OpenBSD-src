@@ -63,7 +63,7 @@ trampoline_vectors:
 
 	vector el0_sync		/* Synchronous 64-bit EL0 */
 	vector el0_irq		/* IRQ 64-bit EL0 */
-	vempty			/* FIQ 64-bit EL0 */
+	vector el0_fiq		/* FIQ 64-bit EL0 */
 	vector el0_error	/* Error 64-bit EL0 */
 
 	vempty			/* Synchronous 32-bit EL0 */
@@ -94,22 +94,33 @@ tramp_return:
  */
 	.align 12
 
-.macro	tramp_enter
+.macro	tramp_enter fiq
+.if \fiq == 0
+	/* must block FIQ in block save for IRQ or x18 may be corrupted */
+	msr	daifset, #1
+.endif
 	ldr	x18, =exception_vectors
 	msr	vbar_el1, x18
 	isb
 	mrs	x18, tpidrro_el0
 	msr	tpidrro_el0, xzr
+.if \fiq == 0
+	msr	daifclr, #1
+.endif
 .endm
 
 tramp_el0_sync:
-	tramp_enter
+	tramp_enter 0
 	b	handle_el0_sync
 
 tramp_el0_irq:
-	tramp_enter
+	tramp_enter 0
 	b	handle_el0_irq
 
+tramp_el0_fiq:
+	tramp_enter 1
+	b	handle_el0_fiq
+
 tramp_el0_error:
-	tramp_enter
+	tramp_enter 0
 	b	handle_el0_error
