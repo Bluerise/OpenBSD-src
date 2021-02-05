@@ -74,6 +74,7 @@ struct pmap {
 #define PMAP_PA_MASK	~((paddr_t)PAGE_MASK) /* to remove the flags */
 #define PMAP_NOCACHE	0x1 /* non-cacheable memory */
 #define PMAP_DEVICE	0x2 /* device memory */
+#define PMAP_WC		PMAP_DEVICE
 
 #define PG_PMAP_MOD		PG_PMAP0
 #define PG_PMAP_REF		PG_PMAP1
