@@ -176,6 +176,8 @@ int smu7_fan_ctrl_start_smc_fan_control(struct pp_hwmgr *hwmgr)
 				advanceFanControlParameters.ucTargetTemperature,
 				NULL);
 
+	printf("%s:%d: ucEnableZeroRPM %x\n", __func__, __LINE__,
+	    hwmgr->thermal_controller.advanceFanControlParameters.ucEnableZeroRPM);
 	if (!result &&
 	    (hwmgr->chip_id == CHIP_POLARIS10 ||
 	    hwmgr->chip_id == CHIP_POLARIS11 ||

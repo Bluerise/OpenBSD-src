@@ -481,6 +481,8 @@ static void polaris10_populate_zero_rpm_parameters(struct pp_hwmgr *hwmgr)
 	uint16_t fan_start_temp =
 		((uint16_t)hwmgr->thermal_controller.advanceFanControlParameters.ucFanStartTemperature) << 8;
 
+	printf("%s:%d: ucEnableZeroRPM %x\n", __func__, __LINE__,
+	    hwmgr->thermal_controller.advanceFanControlParameters.ucEnableZeroRPM);
 	if (hwmgr->thermal_controller.advanceFanControlParameters.ucEnableZeroRPM) {
 		table->FanStartTemperature = PP_HOST_TO_SMC_US(fan_start_temp);
 		table->FanStopTemperature = PP_HOST_TO_SMC_US(fan_stop_temp);
