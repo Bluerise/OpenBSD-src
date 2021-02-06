@@ -134,7 +134,8 @@ exuart_init_cons(void)
 	struct fdt_reg reg;
 	void *node, *root;
 
-	if ((node = fdt_find_cons("samsung,exynos4210-uart")) == NULL)
+	if ((node = fdt_find_cons("apple,uart")) == NULL &&
+	    (node = fdt_find_cons("samsung,exynos4210-uart")) == NULL)
 		return;
 
 	/* dtb uses serial2, qemu uses serial0 */
@@ -159,7 +160,8 @@ exuart_match(struct device *parent, void *self, void *aux)
 {
 	struct fdt_attach_args *faa = aux;
 
-	return OF_is_compatible(faa->fa_node, "samsung,exynos4210-uart");
+	return (OF_is_compatible(faa->fa_node, "apple,uart") ||
+	    OF_is_compatible(faa->fa_node, "samsung,exynos4210-uart"));
 }
 
 void
@@ -920,9 +922,7 @@ exuartcngetc(dev_t dev)
 	int s;
 	s = splhigh();
 	while((bus_space_read_4(exuartconsiot, exuartconsioh, EXUART_UTRSTAT) &
-	    EXUART_UTRSTAT_RXBREADY) == 0 &&
-	      (bus_space_read_4(exuartconsiot, exuartconsioh, EXUART_UFSTAT) &
-	    (EXUART_UFSTAT_RX_FIFO_CNT_MASK|EXUART_UFSTAT_RX_FIFO_FULL)) == 0)
+	    EXUART_UTRSTAT_RXBREADY) == 0)
 		;
 	c = bus_space_read_1(exuartconsiot, exuartconsioh, EXUART_URXH);
 	splx(s);
@@ -934,8 +934,8 @@ exuartcnputc(dev_t dev, int c)
 {
 	int s;
 	s = splhigh();
-	while (bus_space_read_4(exuartconsiot, exuartconsioh, EXUART_UFSTAT) &
-	   EXUART_UFSTAT_TX_FIFO_FULL)
+	while ((bus_space_read_4(exuartconsiot, exuartconsioh, EXUART_UTRSTAT) &
+	   EXUART_UTRSTAT_TXBEMPTY) == 0)
 		;
 	bus_space_write_1(exuartconsiot, exuartconsioh, EXUART_UTXH, c);
 	splx(s);
