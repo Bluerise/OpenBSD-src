@@ -287,7 +287,7 @@ agintc_attach(struct device *parent, struct device *self, void *aux)
 	int			 nipi, ipiirq[2];
 #endif
 
-	psw = disable_interrupts();
+	psw = disable_interrupts(PSR_I);
 	arm_init_smask();
 
 	sc->sc_iot = faa->fa_iot;
@@ -673,7 +673,7 @@ agintc_cpuinit(void)
 	__asm volatile("msr "STR(ICC_PMR)", %x0" :: "r"(0xff));
 	__asm volatile("msr "STR(ICC_BPR1)", %x0" :: "r"(0));
 	__asm volatile("msr "STR(ICC_IGRPEN1)", %x0" :: "r"(1));
-	enable_interrupts();
+	enable_interrupts(PSR_I);
 }
 
 void
@@ -704,7 +704,7 @@ agintc_setipl(int ipl)
 	uint32_t		 prival;
 
 	/* disable here is only to keep hardware in sync with ci->ci_cpl */
-	psw = disable_interrupts();
+	psw = disable_interrupts(PSR_I);
 	ci->ci_cpl = ipl;
 
 	prival = ((0xff - ipl) << sc->sc_pmr_shift) & 0xff;
@@ -925,9 +925,9 @@ agintc_run_handler(struct intrhand *ih, void *frame, int s)
 	else
 		arg = frame;
 
-	enable_interrupts();
+	enable_interrupts(PSR_I);
 	handled = ih->ih_func(arg);
-	disable_interrupts();
+	disable_interrupts(PSR_I);
 	if (handled)
 		ih->ih_count.ec_count++;
 
@@ -1046,7 +1046,7 @@ agintc_intr_establish(int irqno, int type, int level, struct cpu_info *ci,
 	ih->ih_name = name;
 	ih->ih_ci = ci;
 
-	psw = disable_interrupts();
+	psw = disable_interrupts(PSR_I);
 
 	if (irqno < LPI_BASE) {
 		if (!TAILQ_EMPTY(&sc->sc_handler[irqno].iq_list) &&
@@ -1093,7 +1093,7 @@ agintc_intr_disestablish(void *cookie)
 	int			 irqno = ih->ih_irq;
 	int			 psw;
 
-	psw = disable_interrupts();
+	psw = disable_interrupts(PSR_I);
 
 	TAILQ_REMOVE(&sc->sc_handler[irqno].iq_list, ih, ih_list);
 	if (ih->ih_name != NULL)

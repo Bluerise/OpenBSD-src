@@ -271,34 +271,44 @@ restore_daif(uint32_t daif)
 }
 
 static __inline void
-enable_irq_daif()
+enable_irq_daif(uint32_t psr)
 {
-	__asm volatile ("msr daifclr, #3");
+	if (psr == (PSR_I | PSR_F))
+		__asm volatile ("msr daifclr, #3");
+	else if (psr == PSR_I)
+		__asm volatile ("msr daifclr, #2");
+	else if (psr == PSR_F)
+		__asm volatile ("msr daifclr, #1");
 }
 
 static __inline void
-disable_irq_daif()
+disable_irq_daif(uint32_t psr)
 {
-	__asm volatile ("msr daifset, #3");
+	if (psr == (PSR_I | PSR_F))
+		__asm volatile ("msr daifset, #3");
+	else if (psr == PSR_I)
+		__asm volatile ("msr daifset, #2");
+	else if (psr == PSR_F)
+		__asm volatile ("msr daifset, #1");
 }
 
 static __inline uint32_t
-disable_irq_daif_ret()
+disable_irq_daif_ret(psr)
 {
 	uint32_t daif;
 	__asm volatile ("mrs %x0, daif": "=r"(daif));
-	__asm volatile ("msr daifset, #3");
+	disable_irq_daif(psr);
 	return daif;
 }
 
 #define get_interrupts(mask)						\
 	(__get_daif())
 
-#define disable_interrupts()						\
-	disable_irq_daif_ret()
+#define disable_interrupts(psr)						\
+	disable_irq_daif_ret((psr))
 
-#define enable_interrupts()						\
-	enable_irq_daif()
+#define enable_interrupts(psr)						\
+	enable_irq_daif((psr))
 
 #define restore_interrupts(old_daif)					\
 	restore_daif(old_daif)
@@ -306,13 +316,14 @@ disable_irq_daif_ret()
 static inline void
 intr_enable(void)
 {
-	enable_irq_daif();
+	/* XXX: What about IPL_HIGH and FIQ clock? */
+	enable_irq_daif(PSR_I | PSR_F);
 }
 
 static inline u_long
 intr_disable(void)
 {
-	return disable_irq_daif_ret();
+	return disable_irq_daif_ret(PSR_I | PSR_F);
 }
 
 static inline void

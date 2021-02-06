@@ -208,7 +208,8 @@ do_el1h_sync(struct trapframe *frame)
 	exception = ESR_ELx_EXCEPTION(esr);
 	far = READ_SPECIALREG(far_el1);
 
-	enable_interrupts();
+	/* XXX: What about FIQ? What if we are IPL_HIGH? */
+	enable_interrupts(PSR_I);
 
 	/*
 	 * Sanity check we are in an exception er can handle. The IL bit
@@ -270,7 +271,8 @@ do_el0_sync(struct trapframe *frame)
 	exception = ESR_ELx_EXCEPTION(esr);
 	far = READ_SPECIALREG(far_el1);
 
-	enable_interrupts();
+	/* XXX: What about FIQ? What if we are IPL_HIGH? */
+	enable_interrupts(PSR_I);
 
 	p->p_addr->u_pcb.pcb_tf = frame;
 	refreshcreds(p);

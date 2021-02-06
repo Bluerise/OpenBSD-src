@@ -659,7 +659,7 @@ arm_do_pending_intr(int pcpl)
 	struct cpu_info *ci = curcpu();
 	int oldirqstate;
 
-	oldirqstate = disable_interrupts();
+	oldirqstate = disable_interrupts(PSR_I | PSR_F);
 
 #define DO_SOFTINT(si, ipl) \
 	if ((ci->ci_ipending & arm_smask[pcpl]) &	\
@@ -668,7 +668,7 @@ arm_do_pending_intr(int pcpl)
 		arm_intr_func.setipl(ipl);				\
 		restore_interrupts(oldirqstate);			\
 		softintr_dispatch(si);					\
-		oldirqstate = disable_interrupts();			\
+		oldirqstate = disable_interrupts(PSR_I | PSR_F);	\
 	}
 
 	do {

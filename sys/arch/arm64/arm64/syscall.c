@@ -47,8 +47,10 @@ svc_handler(trapframe_t *frame)
 	vfp_save();
 
 	/* Re-enable interrupts if they were enabled previously */
-	if (__predict_true((frame->tf_spsr & I_bit) == 0))
-		enable_interrupts();
+	if (__predict_true((frame->tf_spsr & (PSR_I|PSR_F)) != (PSR_I|PSR_F)))
+		enable_interrupts(
+			    ((frame->tf_spsr & PSR_I) ? 0 : PSR_I) |
+			    ((frame->tf_spsr & PSR_F) ? 0 : PSR_F));
 
 	/* Skip over speculation-blocking barrier. */
 	frame->tf_elr += 8;

@@ -367,7 +367,7 @@ ampintc_attach(struct device *parent, struct device *self, void *aux)
 	/* enable interrupts */
 	bus_space_write_4(sc->sc_iot, sc->sc_d_ioh, ICD_DCR, 3);
 	bus_space_write_4(sc->sc_iot, sc->sc_p_ioh, ICPICR, 1);
-	enable_interrupts();
+	enable_interrupts(PSR_I);
 
 	sc->sc_ic.ic_node = faa->fa_node;
 	sc->sc_ic.ic_cookie = self;
@@ -406,7 +406,7 @@ ampintc_setipl(int new)
 	int			 psw;
 
 	/* disable here is only to keep hardware in sync with ci->ci_cpl */
-	psw = disable_interrupts();
+	psw = disable_interrupts(PSR_I);
 	ci->ci_cpl = new;
 
 	/* low values are higher priority thus IPL_HIGH - pri */
@@ -695,9 +695,9 @@ ampintc_irq_handler(void *frame)
 		else
 			arg = frame;
 
-		enable_interrupts();
+		enable_interrupts(PSR_I);
 		handled = ih->ih_func(arg);
-		disable_interrupts();
+		disable_interrupts(PSR_I);
 		if (handled)
 			ih->ih_count.ec_count++;
 
@@ -771,7 +771,7 @@ ampintc_intr_establish(int irqno, int type, int level, struct cpu_info *ci,
 	ih->ih_name = name;
 	ih->ih_ci = ci;
 
-	psw = disable_interrupts();
+	psw = disable_interrupts(PSR_I);
 
 	if (!TAILQ_EMPTY(&sc->sc_handler[irqno].iq_list) &&
 	    sc->sc_handler[irqno].iq_ci != ci) {
@@ -810,7 +810,7 @@ ampintc_intr_disestablish(void *cookie)
 	    ih->ih_irq, ih->ih_ipl, ih->ih_name);
 #endif
 
-	psw = disable_interrupts();
+	psw = disable_interrupts(PSR_I);
 
 	TAILQ_REMOVE(&sc->sc_handler[ih->ih_irq].iq_list, ih, ih_list);
 	if (ih->ih_name != NULL)

@@ -227,7 +227,7 @@ efi_enter(struct efi_softc *sc)
 {
 	struct pmap *pm = sc->sc_pm;
 
-	sc->sc_psw = disable_interrupts();
+	sc->sc_psw = disable_interrupts(PSR_I | PSR_F);
 	WRITE_SPECIALREG(ttbr0_el1, pmap_kernel()->pm_pt0pa);
 	__asm volatile("isb");
 	cpu_setttb(pm->pm_asid, pm->pm_pt0pa);

@@ -231,7 +231,7 @@ bcm_intc_attach(struct device *parent, struct device *self, void *aux)
 	intr_send_ipi_func = bcm_intc_send_ipi;
 	
 	bcm_intc_setipl(IPL_HIGH);  /* XXX ??? */
-	enable_interrupts();
+	enable_interrupts(PSR_I);
 }
 
 void
@@ -360,7 +360,7 @@ bcm_intc_setipl(int new)
 	struct bcm_intc_softc *sc = bcm_intc;
 	int psw;
 
-	psw = disable_interrupts();
+	psw = disable_interrupts(PSR_I);
 	ci->ci_cpl = new;
 	if (cpu_number() == 0) {
 		bus_space_write_4(sc->sc_iot, sc->sc_ioh, INTC_DISABLE_BANK0,
@@ -485,9 +485,9 @@ bcm_intc_call_handler(int irq, void *frame)
 		else
 			arg = frame;
 
-		enable_interrupts();
+		enable_interrupts(PSR_I);
 		handled = ih->ih_func(arg);
-		disable_interrupts();
+		disable_interrupts(PSR_I);
 		if (handled)
 			ih->ih_count.ec_count++;
 
@@ -563,7 +563,7 @@ bcm_intc_intr_establish(int irqno, int level, struct cpu_info *ci,
 	if (ci != NULL && !CPU_IS_PRIMARY(ci))
 		return NULL;
 
-	psw = disable_interrupts();
+	psw = disable_interrupts(PSR_I);
 
 	ih = malloc(sizeof *ih, M_DEVBUF, M_WAITOK);
 	ih->ih_func = func;
@@ -599,7 +599,7 @@ bcm_intc_intr_disestablish(void *cookie)
 	int irqno = ih->ih_irq;
 	int psw;
 
-	psw = disable_interrupts();
+	psw = disable_interrupts(PSR_I);
 	TAILQ_REMOVE(&sc->sc_bcm_intc_handler[irqno].is_list, ih, ih_list);
 	if (ih->ih_name != NULL)
 		evcount_detach(&ih->ih_count);

@@ -142,7 +142,7 @@ vfp_enable(void)
 
 	if (curproc->p_addr->u_pcb.pcb_fpcpu == ci &&
 	    ci->ci_fpuproc == curproc) {
-		disable_interrupts();
+		disable_interrupts(PSR_I | PSR_F);
 
 		/* FPU state is still valid, just enable and go */
 		set_vfp_enable(1);
@@ -158,7 +158,7 @@ vfp_load(struct proc *p)
 	int psw;
 
 	/* do not allow a partially synced state here */
-	psw = disable_interrupts();
+	psw = disable_interrupts(PSR_I | PSR_F);
 
 	/*
 	 * p->p_pcb->pcb_fpucpu _may_ not be NULL here, but the FPU state

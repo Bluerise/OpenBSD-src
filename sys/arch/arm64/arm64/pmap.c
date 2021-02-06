@@ -1391,7 +1391,7 @@ pmap_activate(struct proc *p)
 	pmap_t pm = p->p_vmspace->vm_map.pmap;
 	int psw;
 
-	psw = disable_interrupts();
+	psw = disable_interrupts(PSR_I | PSR_F);
 	if (p == curproc && pm != curcpu()->ci_curpm)
 		pmap_setttb(p);
 	restore_interrupts(psw);

@@ -204,7 +204,7 @@ cpu_idle_enter(void)
 void
 cpu_idle_cycle(void)
 {
-	enable_irq_daif();
+	enable_irq_daif(PSR_I | PSR_F);
 	__asm volatile("dsb sy");
 	__asm volatile("wfi");
 }

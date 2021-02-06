@@ -615,7 +615,4 @@
 #define	CPU_ID_CORTEX_A72_R1	0x411fd080
 #define	CPU_ID_CORTEX_A57_MASK	0xff0ffff0
 
-#define I_bit (1 << 7)		/* IRQ disable */
-#define F_bit 0			/* FIQ disable - not actually used */
-
 #endif /* !_MACHINE_ARMREG_H_ */
