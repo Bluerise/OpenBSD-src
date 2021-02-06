@@ -290,7 +290,7 @@ db_cpuinfo_cmd(db_expr_t addr, int have_addr, db_expr_t count, char *modif)
 	int i;
 
 	for (i = 0; i < MAXCPUS; i++) {
-		if (cpu_info[i] != NULL) {
+		if (cpu_info[i] != NULL && cpu_info[i]->ci_flags != 0) {
 			db_printf("%c%4d: ", (i == cpu_number()) ? '*' : ' ',
 			    CPU_INFO_UNIT(cpu_info[i]));
 			switch(cpu_info[i]->ci_ddb_paused) {
@@ -325,13 +325,15 @@ db_startproc_cmd(db_expr_t addr, int have_addr, db_expr_t count, char *modif)
 
 	if (have_addr) {
 		if (addr >= 0 && addr < MAXCPUS &&
-		    cpu_info[addr] != NULL && addr != cpu_number())
+		    cpu_info[addr] != NULL && cpu_info[addr]->ci_flags != 0 &&
+		    addr != cpu_number())
 			db_startcpu(addr);
 		else
 			db_printf("Invalid cpu %d\n", (int)addr);
 	} else {
 		for (i = 0; i < MAXCPUS; i++) {
-			if (cpu_info[i] != NULL && i != cpu_number())
+			if (cpu_info[i] != NULL && cpu_info[i]->ci_flags != 0 &&
+			    i != cpu_number())
 				db_startcpu(i);
 		}
 	}
@@ -344,13 +346,15 @@ db_stopproc_cmd(db_expr_t addr, int have_addr, db_expr_t count, char *modif)
 
 	if (have_addr) {
 		if (addr >= 0 && addr < MAXCPUS &&
-		    cpu_info[addr] != NULL && addr != cpu_number())
+		    cpu_info[addr] != NULL && cpu_info[addr]->ci_flags != 0 &&
+		    addr != cpu_number())
 			db_stopcpu(addr);
 		else
 			db_printf("Invalid cpu %d\n", (int)addr);
 	} else {
 		for (i = 0; i < MAXCPUS; i++) {
-			if (cpu_info[i] != NULL && i != cpu_number())
+			if (cpu_info[i] != NULL && cpu_info[i]->ci_flags != 0 &&
+			    i != cpu_number())
 				db_stopcpu(i);
 		}
 	}
@@ -361,7 +365,8 @@ db_ddbproc_cmd(db_expr_t addr, int have_addr, db_expr_t count, char *modif)
 {
 	if (have_addr) {
 		if (addr >= 0 && addr < MAXCPUS &&
-		    cpu_info[addr] != NULL && addr != cpu_number()) {
+		    cpu_info[addr] != NULL && cpu_info[addr]->ci_flags != 0 &&
+		    addr != cpu_number()) {
 			db_stopcpu(addr);
 			db_switch_to_cpu = addr;
 			db_switch_cpu = 1;
@@ -388,7 +393,8 @@ db_enter_ddb(void)
 		curcpu()->ci_ddb_paused = CI_DDB_INDDB;
 		db_mtx_leave(&ddb_mp_mutex);
 		for (i = 0; i < MAXCPUS; i++) {
-			if (cpu_info[i] != NULL && i != cpu_number() &&
+			if (cpu_info[i] != NULL && cpu_info[i]->ci_flags != 0 &&
+			    i != cpu_number() &&
 			    cpu_info[i]->ci_ddb_paused != CI_DDB_STOPPED) {
 				cpu_info[i]->ci_ddb_paused = CI_DDB_SHOULDSTOP;
 				arm_send_ipi(cpu_info[i], ARM_IPI_DDB);
@@ -400,7 +406,7 @@ db_enter_ddb(void)
 	/* Leaving ddb completely.  Start all other CPUs and return 0 */
 	if (ddb_active_cpu == cpu_number() && ddb_state == DDB_STATE_EXITING) {
 		for (i = 0; i < MAXCPUS; i++) {
-			if (cpu_info[i] != NULL) {
+			if (cpu_info[i] != NULL && cpu_info[i]->ci_flags != 0) {
 				cpu_info[i]->ci_ddb_paused = CI_DDB_RUNNING;
 			}
 		}
@@ -446,7 +452,8 @@ db_enter_ddb(void)
 void
 db_startcpu(int cpu)
 {
-	if (cpu != cpu_number() && cpu_info[cpu] != NULL) {
+	if (cpu != cpu_number() && cpu_info[cpu] != NULL &&
+	    cpu_info[cpu]->ci_flags != 0) {
 		db_mtx_enter(&ddb_mp_mutex);
 		cpu_info[cpu]->ci_ddb_paused = CI_DDB_RUNNING;
 		db_mtx_leave(&ddb_mp_mutex);
@@ -458,6 +465,7 @@ db_stopcpu(int cpu)
 {
 	db_mtx_enter(&ddb_mp_mutex);
 	if (cpu != cpu_number() && cpu_info[cpu] != NULL &&
+	    cpu_info[cpu]->ci_flags != 0 &&
 	    cpu_info[cpu]->ci_ddb_paused != CI_DDB_STOPPED) {
 		cpu_info[cpu]->ci_ddb_paused = CI_DDB_SHOULDSTOP;
 		db_mtx_leave(&ddb_mp_mutex);
@@ -503,7 +511,7 @@ db_machine_init(void)
 	db_machine_commands_install(db_machine_command_table);
 #ifdef MULTIPROCESSOR
 	for (i = 0; i < MAXCPUS; i++) {
-		if (cpu_info[i] != NULL)
+		if (cpu_info[i] != NULL && cpu_info[i]->ci_flags != 0)
 			cpu_info[i]->ci_ddb_paused = CI_DDB_RUNNING;
 	}
 #endif
