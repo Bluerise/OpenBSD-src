@@ -69,6 +69,7 @@ ampintc*	at fdt? early 1
 ampintcmsi*	at fdt? early 1
 agintc*		at fdt? early 1
 agintcmsi*	at fdt? early 1
+aplintc*	at fdt? early 1
 agtimer*	at fdt?
 ahci*		at fdt?
 dwge*		at fdt?

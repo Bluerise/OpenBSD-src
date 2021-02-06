@@ -133,6 +133,10 @@ device	agtimer
 attach	agtimer at fdt
 file	arch/arm64/dev/agtimer.c		agtimer
 
+device	aplintc
+attach	aplintc at fdt
+file	arch/arm64/dev/aplintc.c		aplintc
+
 device	bcmintc
 attach	bcmintc at fdt
 file	arch/arm64/dev/bcm2836_intr.c		bcmintc
