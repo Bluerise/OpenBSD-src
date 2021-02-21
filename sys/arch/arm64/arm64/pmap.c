@@ -2298,6 +2298,7 @@ pmap_setttb(struct proc *p)
 	WRITE_SPECIALREG(ttbr0_el1, pmap_kernel()->pm_pt0pa);
 	__asm volatile("isb");
 	cpu_setttb(pm->pm_asid, pm->pm_pt0pa);
+	cpu_tlb_flush();
 	ci->ci_flush_bp();
 	ci->ci_curpm = pm;
 }
