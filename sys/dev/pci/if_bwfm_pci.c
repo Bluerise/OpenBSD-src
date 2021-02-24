@@ -742,6 +742,8 @@ bwfm_pci_load_microcode(struct bwfm_pci_softc *sc, const u_char *ucode, size_t s
 	struct bwfm_softc *bwfm = (void *)sc;
 	struct bwfm_core *core;
 	uint32_t shared, written;
+	uint32_t start, end;
+	uint8_t *rand;
 	int i;
 
 	if (bwfm->sc_chip.ch_chip == BRCM_CC_43602_CHIP_ID) {
@@ -756,19 +758,43 @@ bwfm_pci_load_microcode(struct bwfm_pci_softc *sc, const u_char *ucode, size_t s
 		    BWFM_PCI_ARMCR4REG_BANKPDA, 0);
 	}
 
+	start = bwfm->sc_chip.ch_rambase;
+	end = start + bwfm->sc_chip.ch_ramsize;
+
+	/* Upload FW */
 	for (i = 0; i < size; i++)
 		bus_space_write_1(sc->sc_tcm_iot, sc->sc_tcm_ioh,
-		    bwfm->sc_chip.ch_rambase + i, ucode[i]);
+		    start + i, ucode[i]);
+	start += size;
 
 	/* Firmware replaces this with a pointer once up. */
 	bus_space_write_4(sc->sc_tcm_iot, sc->sc_tcm_ioh,
 	    bwfm->sc_chip.ch_rambase + bwfm->sc_chip.ch_ramsize - 4, 0);
 
 	if (nvram) {
+		/* Upload NVRAM */
+		end -= nvlen;
 		for (i = 0; i < nvlen; i++)
 			bus_space_write_1(sc->sc_tcm_iot, sc->sc_tcm_ioh,
-			    bwfm->sc_chip.ch_rambase + bwfm->sc_chip.ch_ramsize
-			    - nvlen  + i, nvram[i]);
+			    end + i, nvram[i]);
+		/* Prepend random bytes */
+		if (bwfm->sc_chip.ch_chip == BRCM_CC_4378_CHIP_ID) {
+			end -= (256 + 8);
+			rand = malloc(256 + 8, M_TEMP, M_WAITOK);
+			arc4random_buf(rand, 256);
+			memcpy(rand + 256, "\x00\x01\x00\x00\xde\xc0\xed\xfe", 8);
+			for (i = 0; i < (256 + 8); i++)
+				bus_space_write_1(sc->sc_tcm_iot, sc->sc_tcm_ioh,
+				    end + i, rand[i]);
+			free(rand, M_TEMP, 256 + 8);
+		}
+	}
+
+	/* Zero space between FW and RND/NVRAM */
+	if (bwfm->sc_chip.ch_chip == BRCM_CC_4378_CHIP_ID) {
+		while (start < end)
+			bus_space_write_1(sc->sc_tcm_iot, sc->sc_tcm_ioh,
+			    start++, 0);
 	}
 
 	written = bus_space_read_4(sc->sc_tcm_iot, sc->sc_tcm_ioh,
