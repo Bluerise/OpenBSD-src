@@ -2,20 +2,27 @@
 set -x
 
 readonly BOT_ROOT=/b
-readonly BOT_ROOT_NAME=$1
-readonly BOT_PASS=$2
+readonly AUTH_FILE=$1
+readonly BOT_ROOT_NAME=$(jq -r ".login" $AUTH_FILE)
 
-#pushd /tmp
-#curl -sSO https://dl.google.com/cloudagents/install-monitoring-agent.sh
-#bash install-monitoring-agent.sh
-#curl -sSO https://dl.google.com/cloudagents/install-logging-agent.sh
-#bash install-logging-agent.sh --structured
-#popd
+systemctl daemon-reload
+service buildslave stop
+mkdir -p /b
+rm -rf /b/*
+service buildslave stop
 
-apt-get update -y
-apt-get upgrade -y
+pushd /tmp/
 
-apt-get install sudo -y
+curl -sSO https://dl.google.com/cloudagents/install-monitoring-agent.sh
+sudo bash install-monitoring-agent.sh
+rm install-monitoring-agent.sh
+
+curl -sSO https://dl.google.com/cloudagents/install-logging-agent.sh
+sudo bash install-logging-agent.sh
+rm install-logging-agent.sh
+
+popd
+
 
 systemctl set-property buildslave.service TasksMax=100000
 
@@ -25,10 +32,10 @@ function setup_numbered_bot() {
   mkdir -p $BOT_DIR
 
   buildslave stop $BOT_DIR
-  chown buildbot:buildbot $BOT_DIR
+  chown buildbot $BOT_DIR
   rm -rf $BOT_DIR/*
 
-  buildslave create-slave --allow-shutdown=signal "$BOT_DIR" "lab.llvm.org:9990" "$BOT_NAME" "$BOT_PASS"
+  buildslave create-slave --allow-shutdown=signal "$BOT_DIR" "lab.llvm.org:9990" "$BOT_NAME" $(jq -r ".password" $AUTH_FILE)
 
   echo "Eric Fiselier <ericwf@google.com>" > $BOT_DIR/info/admin
 
@@ -37,6 +44,7 @@ function setup_numbered_bot() {
     uname -a | head -n1
     cmake --version | head -n1
     g++ --version | head -n1
+    clang++ --version | head -n1
     ld --version | head -n1
     date
     lscpu
@@ -67,7 +75,7 @@ function try_start_builder {
   systemctl daemon-reload
   service buildslave restart
 
-  chown -R buildbot:buildbot $BOT_DIR/
+  chown -R buildbot $BOT_DIR/
   sudo -u buildbot /usr/bin/buildslave start $BOT_DIR/
 
   sleep 30
@@ -100,3 +108,4 @@ done
 sleep 72000
 while pkill -SIGHUP buildslave; do sleep 5; done;
 shutdown now
+
