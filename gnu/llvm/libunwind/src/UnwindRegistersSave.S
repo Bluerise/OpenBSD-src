@@ -598,8 +598,8 @@ DEFINE_LIBUNWIND_FUNCTION(__unw_getcontext)
   stw     %r30,128(%r3)
   stw     %r31,132(%r3)
 
-  // zero VRSave register; saveVectorRegisters() will save it
-  li      %r0, 0
+  // save VRSave register
+  mfspr   %r0, 256
   stw     %r0, 156(%r3)
   // save CR registers
   mfcr    %r0
@@ -642,29 +642,12 @@ DEFINE_LIBUNWIND_FUNCTION(__unw_getcontext)
   stfd    %f30,400(%r3)
   stfd    %f31,408(%r3)
 
-  li  %r3, 0    // return UNW_ESUCCESS
-  blr
 
-//
-// void libunwind::Registers_ppc::saveVectorRegisters() const
-//
-// On entry:
-//  thread_state pointer is in r3
-//
-DEFINE_LIBUNWIND_FUNCTION(_ZNK9libunwind13Registers_ppc19saveVectorRegistersEv)
-  // return if we have already saved VRsave
-  lwz    %r0, 156(%r3)
-  cmpwi  %r0, 0
-  bnelr
+  // save vector registers
 
-  stwu   %r1, -32(%r1)  // allocate a stack frame
-  addi   %r4, %r1, 16
-  clrrwi %r4, %r4, 4
-  // r4 is now a 16-byte aligned pointer
-
-  // save VRsave register
-  mfvrsave %r0
-  stw      %r0, 156(%r3)
+  subi    %r4, %r1, 16
+  rlwinm  %r4, %r4, 0, 0, 27  // mask low 4-bits
+  // r4 is now a 16-byte aligned pointer into the red zone
 
 #define SAVE_VECTOR_UNALIGNED(_vec, _offset) \
   stvx    _vec, 0, %r4          SEPARATOR \
@@ -710,10 +693,11 @@ DEFINE_LIBUNWIND_FUNCTION(_ZNK9libunwind13Registers_ppc19saveVectorRegistersEv)
   SAVE_VECTOR_UNALIGNED(%v30, 424+0x1E0)
   SAVE_VECTOR_UNALIGNED(%v31, 424+0x1F0)
 
-  addi   %r1, %r1, 32  // drop the stack frame
+  li      %r3, 0  // return UNW_ESUCCESS
   blr
 
-#elif defined(__aarch64__)
+
+#elif defined(__arm64__) || defined(__aarch64__)
 
 //
 // extern int __unw_getcontext(unw_context_t* thread_state)
@@ -961,105 +945,6 @@ DEFINE_LIBUNWIND_FUNCTION(__unw_getcontext)
   # zero epcr
   l.sw     132(r3), r0
 
-#elif defined(__hexagon__)
-
-#
-# extern int unw_getcontext(unw_context_t* thread_state)
-#
-# On entry:
-#  thread_state pointer is in r0
-#
-#define OFFSET(offset) (offset/4)
-DEFINE_LIBUNWIND_FUNCTION(__unw_getcontext)
-  memw(r0+#32) = r8
-  memw(r0+#36) = r9
-  memw(r0+#40) = r10
-  memw(r0+#44) = r11
-
-  memw(r0+#48) = r12
-  memw(r0+#52) = r13
-  memw(r0+#56) = r14
-  memw(r0+#60) = r15
-
-  memw(r0+#64) = r16
-  memw(r0+#68) = r17
-  memw(r0+#72) = r18
-  memw(r0+#76) = r19
-
-  memw(r0+#80) = r20
-  memw(r0+#84) = r21
-  memw(r0+#88) = r22
-  memw(r0+#92) = r23
-
-  memw(r0+#96) = r24
-  memw(r0+#100) = r25
-  memw(r0+#104) = r26
-  memw(r0+#108) = r27
-
-  memw(r0+#112) = r28
-  memw(r0+#116) = r29
-  memw(r0+#120) = r30
-  memw(r0+#124) = r31
-  r1 = c4   // Predicate register
-  memw(r0+#128) = r1
-  r1 = memw(r30)           // *FP == Saved FP
-  r1 = r31
-  memw(r0+#132) = r1
-
-  jumpr r31
-
-#elif defined(__sparc__) && defined(__arch64__)
-
-#
-# extern int unw_getcontext(unw_context_t* thread_state)
-#
-# On entry:
-#  thread_state pointer is in %o0
-#
-DEFINE_LIBUNWIND_FUNCTION(__unw_getcontext)
-  stx  %g1, [%o0 + 0x08]
-  stx  %g2, [%o0 + 0x10]
-  stx  %g3, [%o0 + 0x18]
-  stx  %g4, [%o0 + 0x20]
-  stx  %g5, [%o0 + 0x28]
-  stx  %g6, [%o0 + 0x30]
-  stx  %g7, [%o0 + 0x38]
-  stx  %o0, [%o0 + 0x40]
-  stx  %o1, [%o0 + 0x48]
-  stx  %o2, [%o0 + 0x50]
-  stx  %o3, [%o0 + 0x58]
-  stx  %o4, [%o0 + 0x60]
-  stx  %o5, [%o0 + 0x68]
-  stx  %o6, [%o0 + 0x70]
-  stx  %o7, [%o0 + 0x78]
-  stx  %l0, [%o0 + 0x80]
-  stx  %l1, [%o0 + 0x88]
-  stx  %l2, [%o0 + 0x90]
-  stx  %l3, [%o0 + 0x98]
-  stx  %l4, [%o0 + 0xa0]
-  stx  %l5, [%o0 + 0xa8]
-  stx  %l6, [%o0 + 0xb0]
-  stx  %l7, [%o0 + 0xb8]
-  stx  %i0, [%o0 + 0xc0]
-  stx  %i1, [%o0 + 0xc8]
-  stx  %i2, [%o0 + 0xd0]
-  stx  %i3, [%o0 + 0xd8]
-  stx  %i4, [%o0 + 0xe0]
-  stx  %i5, [%o0 + 0xe8]
-  stx  %i6, [%o0 + 0xf0]
-  stx  %i7, [%o0 + 0xf8]
-
-  # save StackGhost cookie
-  add  %i7, %g0, %g4
-  save %sp, -176, %sp
-  # register window flush necessary even without StackGhost
-  flushw
-  restore
-  ldx  [%sp + 2047 + 0x78], %g5
-  xor  %g4, %g5, %g4
-  retl
-   stx %g4, [%o0 + 0x100]
-
 #elif defined(__sparc__)
 
 #
@@ -1099,7 +984,7 @@ DEFINE_LIBUNWIND_FUNCTION(__unw_getcontext)
 #  thread_state pointer is in a0
 #
 DEFINE_LIBUNWIND_FUNCTION(__unw_getcontext)
-  sd    x1, (8 * 0)(a0) // store ra as pc
+  // x0 is zero
   sd    x1, (8 * 1)(a0)
   sd    x2, (8 * 2)(a0)
   sd    x3, (8 * 3)(a0)

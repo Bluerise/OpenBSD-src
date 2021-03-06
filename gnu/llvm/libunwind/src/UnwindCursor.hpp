@@ -75,8 +75,6 @@ extern "C" _Unwind_Reason_Code __libunwind_seh_personality(
 
 namespace libunwind {
 
-static thread_local UnwindInfoSectionsCache uwis_cache;
-
 #if defined(_LIBUNWIND_SUPPORT_DWARF_UNWIND)
 /// Cache of recently found FDEs.
 template <typename A>
@@ -1125,12 +1123,6 @@ private:
   }
 #endif
 
-#if defined (_LIBUNWIND_TARGET_HEXAGON)
-  compact_unwind_encoding_t dwarfEncoding(Registers_hexagon &) const {
-    return 0;
-  }
-#endif
-
 #if defined (_LIBUNWIND_TARGET_MIPS_O32)
   compact_unwind_encoding_t dwarfEncoding(Registers_mips_o32 &) const {
     return 0;
@@ -1145,12 +1137,6 @@ private:
 
 #if defined(_LIBUNWIND_TARGET_SPARC)
   compact_unwind_encoding_t dwarfEncoding(Registers_sparc &) const { return 0; }
-#endif
-
-#if defined (_LIBUNWIND_TARGET_SPARC64)
-  compact_unwind_encoding_t dwarfEncoding(Registers_sparc64 &) const {
-    return 0;
-  }
 #endif
 
 #if defined (_LIBUNWIND_TARGET_RISCV)
@@ -1283,18 +1269,12 @@ struct EHABISectionIterator {
   _Self operator+(size_t a) { _Self out = *this; out._i += a; return out; }
   _Self operator-(size_t a) { assert(_i >= a); _Self out = *this; out._i -= a; return out; }
 
-  size_t operator-(const _Self& other) const { return _i - other._i; }
+  size_t operator-(const _Self& other) { return _i - other._i; }
 
   bool operator==(const _Self& other) const {
     assert(_addressSpace == other._addressSpace);
     assert(_sects == other._sects);
     return _i == other._i;
-  }
-
-  bool operator!=(const _Self& other) const {
-    assert(_addressSpace == other._addressSpace);
-    assert(_sects == other._sects);
-    return _i != other._i;
   }
 
   typename A::pint_t operator*() const { return functionAddress(); }
@@ -1868,12 +1848,6 @@ void UnwindCursor<A, R>::setInfoBasedOnIPRegister(bool isReturnAddress) {
   pc &= (pint_t)~0x1;
 #endif
 
-  // Exit early if at the top of the stack.
-  if (pc == 0) {
-    _unwindInfoMissing = true;
-    return;
-  }
-
   // If the last line of a function is a "throw" the compiler sometimes
   // emits no instructions after the call to __cxa_throw.  This means
   // the return address is actually the start of the next function.
@@ -1884,14 +1858,7 @@ void UnwindCursor<A, R>::setInfoBasedOnIPRegister(bool isReturnAddress) {
 
   // Ask address space object to find unwind sections for this pc.
   UnwindInfoSections sects;
-  bool have_sects = false;
-  if (uwis_cache.getUnwindInfoSectionsForPC(pc, sects))
-    have_sects = true;
-  else if (_addressSpace.findUnwindSections(pc, sects)) {
-    uwis_cache.setUnwindInfoSectionsForPC(pc, sects);
-    have_sects = true;
-  }
-  if (have_sects) {
+  if (_addressSpace.findUnwindSections(pc, sects)) {
 #if defined(_LIBUNWIND_SUPPORT_COMPACT_UNWIND)
     // If there is a compact unwind encoding table, look there first.
     if (sects.compact_unwind_section != 0) {
