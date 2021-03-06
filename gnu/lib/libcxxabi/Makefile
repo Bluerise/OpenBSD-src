@@ -20,25 +20,24 @@ CXXINCLUDEDIR=	/usr/include/c++/v1
 LIB=		c++abi
 
 
-SRCS+=		abort_message.cpp \
-		cxa_aux_runtime.cpp \
+SRCS+=		cxa_aux_runtime.cpp \
 		cxa_default_handlers.cpp \
 		cxa_demangle.cpp \
-		cxa_exception.cpp \
 		cxa_exception_storage.cpp \
 		cxa_guard.cpp \
 		cxa_handlers.cpp \
-		cxa_personality.cpp \
-		cxa_thread_atexit.cpp \
-		cxa_unexpected.cpp \
 		cxa_vector.cpp \
 		cxa_virtual.cpp \
-		fallback_malloc.cpp \
-		private_typeinfo.cpp \
 		stdlib_exception.cpp \
-		stdlib_new_delete.cpp \
 		stdlib_stdexcept.cpp \
 		stdlib_typeinfo.cpp \
+		abort_message.cpp \
+		fallback_malloc.cpp \
+		private_typeinfo.cpp \
+		stdlib_new_delete.cpp \
+		cxa_exception.cpp \
+		cxa_personality.cpp \
+		cxa_thread_atexit.cpp \
 		Unwind-EHABI.cpp \
 		Unwind-sjlj.c \
 		UnwindLevel1-gcc-ext.c \
