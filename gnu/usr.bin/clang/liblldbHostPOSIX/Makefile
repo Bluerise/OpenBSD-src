@@ -13,7 +13,7 @@ SRCS=	ConnectionFileDescriptorPosix.cpp \
 	HostThreadPosix.cpp \
 	LockFilePosix.cpp \
 	PipePosix.cpp \
-	ProcessLauncherPosixFork.cpp \
+	ProcessLauncherPosixFork.cpp
 
 .PATH:	${.CURDIR}/../../../llvm/lldb/source/Host/posix
 

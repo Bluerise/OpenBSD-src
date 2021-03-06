@@ -21,6 +21,7 @@ SRCS=	AnalysisBasedWarnings.cpp \
 	Sema.cpp \
 	SemaAccess.cpp \
 	SemaAttr.cpp \
+	SemaAvailability.cpp \
 	SemaCXXScopeSpec.cpp \
 	SemaCast.cpp \
 	SemaChecking.cpp \
@@ -50,6 +51,7 @@ SRCS=	AnalysisBasedWarnings.cpp \
 	SemaStmt.cpp \
 	SemaStmtAsm.cpp \
 	SemaStmtAttr.cpp \
+	SemaSYCL.cpp \
 	SemaTemplate.cpp \
 	SemaTemplateDeduction.cpp \
 	SemaTemplateInstantiate.cpp \

@@ -4,19 +4,32 @@
 
 LLVM_SRCS=	${.CURDIR}/../../../../../llvm/llvm
 
-HDRS=	AMDGPUGenAsmMatcher.inc AMDGPUGenAsmWriter.inc \
-	AMDGPUGenCallingConv.inc AMDGPUGenDAGISel.inc \
-	AMDGPUGenDisassemblerTables.inc AMDGPUGenInstrInfo.inc \
-	AMDGPUGenMCCodeEmitter.inc AMDGPUGenMCPseudoLowering.inc \
-	AMDGPUGenRegisterBank.inc AMDGPUGenRegisterInfo.inc \
-	AMDGPUGenSearchableTables.inc AMDGPUGenSubtargetInfo.inc
+HDRS=	AMDGPUGenAsmMatcher.inc \
+	AMDGPUGenAsmWriter.inc \
+	AMDGPUGenCallingConv.inc \
+	AMDGPUGenDAGISel.inc \
+	AMDGPUGenDisassemblerTables.inc \
+	AMDGPUGenInstrInfo.inc \
+	AMDGPUGenMCCodeEmitter.inc \
+	AMDGPUGenMCPseudoLowering.inc \
+	AMDGPUGenRegisterBank.inc \
+	AMDGPUGenRegisterInfo.inc \
+	AMDGPUGenSearchableTables.inc \
+	AMDGPUGenSubtargetInfo.inc
 
-HDRS+=	AMDGPUGenGlobalISel.inc
+HDRS+=	AMDGPUGenGlobalISel.inc \
+	AMDGPUGenPreLegalizeGICombiner.inc \
+	AMDGPUGenPostLegalizeGICombiner.inc \
+	AMDGPUGenRegBankGICombiner.inc
 
-HDRS+=	R600GenAsmWriter.inc R600GenCallingConv.inc \
-	R600GenDAGISel.inc R600GenDFAPacketizer.inc \
-	R600GenInstrInfo.inc R600GenMCCodeEmitter.inc \
-	R600GenRegisterInfo.inc R600GenSubtargetInfo.inc
+HDRS+=	R600GenAsmWriter.inc \
+	R600GenCallingConv.inc \
+	R600GenDAGISel.inc \
+	R600GenDFAPacketizer.inc \
+	R600GenInstrInfo.inc \
+	R600GenMCCodeEmitter.inc \
+	R600GenRegisterInfo.inc \
+	R600GenSubtargetInfo.inc
 
 all: ${HDRS}
 
@@ -77,6 +90,21 @@ AMDGPUGenSubtargetInfo.inc: ${LLVM_SRCS}/lib/Target/AMDGPU/AMDGPU.td
 
 AMDGPUGenGlobalISel.inc: ${LLVM_SRCS}/lib/Target/AMDGPU/AMDGPUGISel.td
 	${.OBJDIR}/../../../llvm-tblgen/llvm-tblgen -gen-global-isel \
+		-I${LLVM_SRCS}/include -I${LLVM_SRCS}/lib/Target/AMDGPU \
+		-o ${.TARGET} ${.ALLSRC}
+AMDGPUGenPreLegalizeGICombiner.inc: ${LLVM_SRCS}/lib/Target/AMDGPU/AMDGPUGISel.td
+	${.OBJDIR}/../../../llvm-tblgen/llvm-tblgen -gen-global-isel-combiner \
+		-combiners="AMDGPUPreLegalizerCombinerHelper" \
+		-I${LLVM_SRCS}/include -I${LLVM_SRCS}/lib/Target/AMDGPU \
+		-o ${.TARGET} ${.ALLSRC}
+AMDGPUGenPostLegalizeGICombiner.inc: ${LLVM_SRCS}/lib/Target/AMDGPU/AMDGPUGISel.td
+	${.OBJDIR}/../../../llvm-tblgen/llvm-tblgen -gen-global-isel-combiner \
+		-combiners="AMDGPUPostLegalizerCombinerHelper" \
+		-I${LLVM_SRCS}/include -I${LLVM_SRCS}/lib/Target/AMDGPU \
+		-o ${.TARGET} ${.ALLSRC}
+AMDGPUGenRegBankGICombiner.inc: ${LLVM_SRCS}/lib/Target/AMDGPU/AMDGPUGISel.td
+	${.OBJDIR}/../../../llvm-tblgen/llvm-tblgen -gen-global-isel-combiner \
+		-combiners="AMDGPURegBankCombinerHelper" \
 		-I${LLVM_SRCS}/include -I${LLVM_SRCS}/lib/Target/AMDGPU \
 		-o ${.TARGET} ${.ALLSRC}
 

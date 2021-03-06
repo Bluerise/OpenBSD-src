@@ -6,11 +6,11 @@ NOPROFILE=
 
 .include <bsd.own.mk>
 SRCS=	EmulateInstructionARM.cpp \
+	EmulationStateARM.cpp \
 	EmulateInstructionARM64.cpp \
 	EmulateInstructionMIPS.cpp \
 	EmulateInstructionMIPS64.cpp \
-	EmulateInstructionPPC64.cpp \
-	EmulationStateARM.cpp \
+	EmulateInstructionPPC64.cpp
 
 .PATH:	${.CURDIR}/../../../llvm/lldb/source/Plugins/Instruction/ARM
 .PATH:	${.CURDIR}/../../../llvm/lldb/source/Plugins/Instruction/ARM64

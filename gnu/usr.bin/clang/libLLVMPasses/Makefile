@@ -3,7 +3,8 @@
 LIB=	LLVMPasses
 NOPROFILE=
 
-CPPFLAGS+=	-I${LLVM_SRCS}/include/llvm/Passes
+CPPFLAGS+=	-I${LLVM_SRCS}/include/llvm/Passes \
+	-I${LLVM_SRCS}/include/llvm/
 
 SRCS+=	PassBuilder.cpp \
 	PassPlugin.cpp \

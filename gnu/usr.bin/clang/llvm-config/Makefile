@@ -5,7 +5,7 @@ BINDIR= /usr/bin
 
 NATIVE_ARCHS=AArch64 ARM Mips PowerPC Sparc X86
 
-PYTHON=		python2
+PYTHON=		python3
 LLVMBUILD=	${.CURDIR}/../../../llvm/llvm/utils/llvm-build/llvm-build
 
 .include <bsd.own.mk>

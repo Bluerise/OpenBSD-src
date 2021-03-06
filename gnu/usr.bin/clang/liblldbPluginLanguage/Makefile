@@ -5,13 +5,10 @@ NOPIC=
 NOPROFILE=
 
 .include <bsd.own.mk>
+# CPlusPlus
 SRCS=	BlockPointer.cpp \
-	CF.cpp \
 	CPlusPlusLanguage.cpp \
 	CPlusPlusNameParser.cpp \
-	ClangHighlighter.cpp \
-	Cocoa.cpp \
-	CoreMedia.cpp \
 	CxxStringTypes.cpp \
 	LibCxx.cpp \
 	LibCxxAtomic.cpp \
@@ -29,19 +26,30 @@ SRCS=	BlockPointer.cpp \
 	LibStdcpp.h \
 	LibStdcppTuple.cpp \
 	LibStdcppUniquePointer.cpp \
-	MSVCUndecoratedNameParser.cpp \
+	MSVCUndecoratedNameParser.cpp
+
+# ClangCommon
+SRCS+=	ClangHighlighter.cpp
+
+# ObjC
+SRCS+=	ObjCLanguage.cpp \
+	CF.cpp \
+	CFBasicHash.cpp \
+	Cocoa.cpp \
+	CoreMedia.cpp \
 	NSArray.cpp \
 	NSDictionary.cpp \
 	NSError.cpp \
 	NSException.cpp \
 	NSIndexPath.cpp \
 	NSSet.cpp \
-	NSString.cpp \
-	ObjCLanguage.cpp \
-	ObjCPlusPlusLanguage.cpp \
+	NSString.cpp
 
-.PATH:	${.CURDIR}/../../../llvm/lldb/source/Plugins/Language/CPlusPlus
+# ObjCPlusPlus
+SRCS+=	ObjCPlusPlusLanguage.cpp
+
 .PATH:	${.CURDIR}/../../../llvm/lldb/source/Plugins/Language/ClangCommon
+.PATH:	${.CURDIR}/../../../llvm/lldb/source/Plugins/Language/CPlusPlus
 .PATH:	${.CURDIR}/../../../llvm/lldb/source/Plugins/Language/ObjC
 .PATH:	${.CURDIR}/../../../llvm/lldb/source/Plugins/Language/ObjCPlusPlus
 

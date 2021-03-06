@@ -3,9 +3,12 @@
 LIB=	LLVMTextAPI
 NOPROFILE=
 
+# TextAPI/ELF
 SRCS+=	ELFStub.cpp \
-	TBEHandler.cpp \
-	Architecture.cpp \
+	TBEHandler.cpp
+
+# TextAPI/MachO
+SRCS+=	Architecture.cpp \
 	ArchitectureSet.cpp \
 	InterfaceFile.cpp \
 	PackedVersion.cpp \

@@ -5,10 +5,10 @@ NOPIC=
 NOPROFILE=
 
 .include <bsd.own.mk>
-SRCS=	ASanRuntime.cpp \
-	MainThreadCheckerRuntime.cpp \
-	TSanRuntime.cpp \
-	UBSanRuntime.cpp \
+SRCS=	InstrumentationRuntimeASan.cpp \
+	InstrumentationRuntimeMainThreadChecker.cpp \
+	InstrumentationRuntimeTSan.cpp \
+	InstrumentationRuntimeUBSan.cpp
 
 .PATH:	${.CURDIR}/../../../llvm/lldb/source/Plugins/InstrumentationRuntime/ASan
 .PATH:	${.CURDIR}/../../../llvm/lldb/source/Plugins/InstrumentationRuntime/MainThreadChecker

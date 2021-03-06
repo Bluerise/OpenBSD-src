@@ -9,7 +9,7 @@ SRCS=	AppleGetItemInfoHandler.cpp \
 	AppleGetPendingItemsHandler.cpp \
 	AppleGetQueuesHandler.cpp \
 	AppleGetThreadItemInfoHandler.cpp \
-	SystemRuntimeMacOSX.cpp \
+	SystemRuntimeMacOSX.cpp
 
 .PATH:	${.CURDIR}/../../../llvm/lldb/source/Plugins/SystemRuntime/MacOSX
 

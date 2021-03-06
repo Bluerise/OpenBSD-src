@@ -4,16 +4,16 @@
 
 LLDB_SRCS=	${.CURDIR}/../../../../../llvm/lldb
 
-DEFS=	DynamicLoaderDarwinKernelProperties.inc
-DEFS+=	DynamicLoaderDarwinKernelPropertiesEnum.inc
-DEFS+=	JITLoaderGDBProperties.inc
-DEFS+=	JITLoaderGDBPropertiesEnum.inc
-DEFS+=	ProcessGDBRemoteProperties.inc
-DEFS+=	ProcessGDBRemotePropertiesEnum.inc
-DEFS+=	StructuredDataDarwinLogProperties.inc
-DEFS+=	StructuredDataDarwinLogPropertiesEnum.inc
-DEFS+=	SymbolFileDWARFProperties.inc
-DEFS+=	SymbolFileDWARFPropertiesEnum.inc
+DEFS=	DynamicLoaderDarwinKernelProperties.inc \
+	DynamicLoaderDarwinKernelPropertiesEnum.inc \
+	JITLoaderGDBProperties.inc \
+	JITLoaderGDBPropertiesEnum.inc \
+	ProcessGDBRemoteProperties.inc \
+	ProcessGDBRemotePropertiesEnum.inc \
+	StructuredDataDarwinLogProperties.inc \
+	StructuredDataDarwinLogPropertiesEnum.inc \
+	SymbolFileDWARFProperties.inc \
+	SymbolFileDWARFPropertiesEnum.inc
 
 all: ${DEFS}
 

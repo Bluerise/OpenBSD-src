@@ -10,6 +10,7 @@ SRCS+=	AliasAnalysis.cpp \
 	AliasAnalysisSummary.cpp \
 	AliasSetTracker.cpp \
 	AnalysisAnalysis.cpp \
+	AssumeBundleQueries.cpp \
 	AssumptionCache.cpp \
 	BasicAliasAnalysis.cpp \
 	BlockFrequencyInfo.cpp \
@@ -40,17 +41,21 @@ SRCS+=	AliasAnalysis.cpp \
 	EHPersonalities.cpp \
 	GlobalsModRef.cpp \
 	GuardUtils.cpp \
+	HeatUtils.cpp \
 	IVDescriptors.cpp \
 	IVUsers.cpp \
 	IndirectCallPromotionAnalysis.cpp \
 	InlineCost.cpp \
+	InlineAdvisor.cpp \
+	InlineFeaturesAnalysis.cpp \
+	InlineSizeEstimatorAnalysis.cpp \
 	InstCount.cpp \
 	InstructionPrecedenceTracking.cpp \
 	InstructionSimplify.cpp \
 	Interval.cpp \
 	IntervalPartition.cpp \
-	LazyBlockFrequencyInfo.cpp \
 	LazyBranchProbabilityInfo.cpp \
+	LazyBlockFrequencyInfo.cpp \
 	LazyCallGraph.cpp \
 	LazyValueInfo.cpp \
 	LegacyDivergenceAnalysis.cpp \
@@ -59,9 +64,10 @@ SRCS+=	AliasAnalysis.cpp \
 	LoopAccessAnalysis.cpp \
 	LoopAnalysisManager.cpp \
 	LoopCacheAnalysis.cpp \
+	LoopNestAnalysis.cpp \
+	LoopUnrollAnalyzer.cpp \
 	LoopInfo.cpp \
 	LoopPass.cpp \
-	LoopUnrollAnalyzer.cpp \
 	MemDepPrinter.cpp \
 	MemDerefPrinter.cpp \
 	MemoryBuiltins.cpp \
@@ -76,8 +82,6 @@ SRCS+=	AliasAnalysis.cpp \
 	ObjCARCAnalysisUtils.cpp \
 	ObjCARCInstKind.cpp \
 	OptimizationRemarkEmitter.cpp \
-	OrderedBasicBlock.cpp \
-	OrderedInstructions.cpp \
 	PHITransAddr.cpp \
 	PhiValues.cpp \
 	PostDominators.cpp \
@@ -88,8 +92,9 @@ SRCS+=	AliasAnalysis.cpp \
 	RegionPrinter.cpp \
 	ScalarEvolution.cpp \
 	ScalarEvolutionAliasAnalysis.cpp \
-	ScalarEvolutionExpander.cpp \
+	ScalarEvolutionDivision.cpp \
 	ScalarEvolutionNormalization.cpp \
+	StackLifetime.cpp \
 	StackSafetyAnalysis.cpp \
 	SyncDependenceAnalysis.cpp \
 	SyntheticCountsUtils.cpp \

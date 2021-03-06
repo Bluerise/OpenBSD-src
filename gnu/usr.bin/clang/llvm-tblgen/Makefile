@@ -8,10 +8,8 @@ SRCS=	AsmMatcherEmitter.cpp \
 	AsmWriterEmitter.cpp \
 	AsmWriterInst.cpp \
 	Attributes.cpp \
-	CTagsEmitter.cpp \
 	CallingConvEmitter.cpp \
 	CodeEmitterGen.cpp \
-	CodeExpander.cpp \
 	CodeGenDAGPatterns.cpp \
 	CodeGenHwModes.cpp \
 	CodeGenInstruction.cpp \
@@ -26,22 +24,16 @@ SRCS=	AsmMatcherEmitter.cpp \
 	DAGISelMatcher.cpp \
 	DFAEmitter.cpp \
 	DFAPacketizerEmitter.cpp \
+	DirectiveEmitter.cpp \
 	DisassemblerEmitter.cpp \
 	ExegesisEmitter.cpp \
 	FastISelEmitter.cpp \
 	FixedLenDecoderEmitter.cpp \
 	GICombinerEmitter.cpp \
-	GIMatchDag.cpp \
-	GIMatchDagEdge.cpp \
-	GIMatchDagInstr.cpp \
-	GIMatchDagOperands.cpp \
-	GIMatchDagPredicate.cpp \
-	GIMatchDagPredicateDependencyEdge.cpp \
-	GIMatchTree.cpp \
 	GlobalISelEmitter.cpp \
 	InfoByHwMode.cpp \
-	InstrDocsEmitter.cpp \
 	InstrInfoEmitter.cpp \
+	InstrDocsEmitter.cpp \
 	IntrinsicEmitter.cpp \
 	OptEmitter.cpp \
 	OptParserEmitter.cpp \
@@ -57,12 +49,21 @@ SRCS=	AsmMatcherEmitter.cpp \
 	SubtargetFeatureInfo.cpp \
 	TableGen.cpp \
 	Types.cpp \
-	WebAssemblyDisassemblerEmitter.cpp \
 	X86DisassemblerTables.cpp \
 	X86EVEX2VEXTablesEmitter.cpp \
 	X86FoldTablesEmitter.cpp \
 	X86ModRMFilters.cpp \
-	X86RecognizableInstr.cpp
+	X86RecognizableInstr.cpp \
+	WebAssemblyDisassemblerEmitter.cpp \
+	CTagsEmitter.cpp \
+	CodeExpander.cpp \
+	GIMatchDag.cpp \
+	GIMatchDagEdge.cpp \
+	GIMatchDagInstr.cpp \
+	GIMatchDagOperands.cpp \
+	GIMatchDagPredicate.cpp \
+	GIMatchDagPredicateDependencyEdge.cpp \
+	GIMatchTree.cpp
 
 .PATH:	${.CURDIR}/../../../llvm/llvm/utils/TableGen
 .PATH:	${.CURDIR}/../../../llvm/llvm/utils/TableGen/GlobalISel

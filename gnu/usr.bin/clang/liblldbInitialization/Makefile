@@ -7,7 +7,7 @@ NOPROFILE=
 .include <bsd.own.mk>
 SRCS=	SystemInitializerCommon.cpp \
 	SystemInitializer.cpp \
-	SystemLifetimeManager.cpp \
+	SystemLifetimeManager.cpp
 
 .PATH:	${.CURDIR}/../../../llvm/lldb/source/Initialization
 

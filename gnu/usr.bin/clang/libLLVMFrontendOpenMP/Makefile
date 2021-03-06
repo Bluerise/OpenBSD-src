@@ -6,7 +6,13 @@ NOPROFILE=
 CPPFLAGS+=	-I${LLVM_SRCS}/include/llvm/Frontend
 CPPFLAGS+=	-I${LLVM_SRCS}/include/llvm/Frontend/OpenMP
 
-SRCS+=	OMPConstants.cpp \
+SRCS+=	OMP.cpp \
+	OMPContext.cpp \
 	OMPIRBuilder.cpp
 
 .PATH:	${.CURDIR}/../../../llvm/llvm/lib/Frontend/OpenMP
+
+OMP.cpp:
+	ln -sf ${.OBJDIR}/../include/llvm/Frontend/OpenMP/OMP.cpp $@
+
+CLEANFILES+= OMP.cpp

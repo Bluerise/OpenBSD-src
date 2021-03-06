@@ -3,11 +3,12 @@
 LIB=	LLVMDebugInfoDWARF
 NOPROFILE=
 
-CPPFLAGS+=	-I${LLVM_SRCS}/include/llvm/DebugInfo/DWARF
+CPPFLAGS+=	-I${LLVM_SRCS}/include/llvm/DebugInfo/DWARF \
+	-I${LLVM_SRCS}/include/llvm/DebugInfo
 
 SRCS+=	DWARFAbbreviationDeclaration.cpp \
-	DWARFAcceleratorTable.cpp \
 	DWARFAddressRange.cpp \
+	DWARFAcceleratorTable.cpp \
 	DWARFCompileUnit.cpp \
 	DWARFContext.cpp \
 	DWARFDataExtractor.cpp \
@@ -28,6 +29,7 @@ SRCS+=	DWARFAbbreviationDeclaration.cpp \
 	DWARFFormValue.cpp \
 	DWARFGdbIndex.cpp \
 	DWARFListTable.cpp \
+	DWARFLocationExpression.cpp \
 	DWARFTypeUnit.cpp \
 	DWARFUnitIndex.cpp \
 	DWARFUnit.cpp \

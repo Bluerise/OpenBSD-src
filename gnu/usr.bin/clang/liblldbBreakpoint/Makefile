@@ -29,7 +29,7 @@ SRCS=	Breakpoint.cpp \
 	StoppointLocation.cpp \
 	Watchpoint.cpp \
 	WatchpointList.cpp \
-	WatchpointOptions.cpp \
+	WatchpointOptions.cpp
 
 .PATH:	${.CURDIR}/../../../llvm/lldb/source/Breakpoint
 

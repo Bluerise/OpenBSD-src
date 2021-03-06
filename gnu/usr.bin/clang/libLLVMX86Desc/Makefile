@@ -9,6 +9,7 @@ SRCS+=	X86ATTInstPrinter.cpp \
 	X86IntelInstPrinter.cpp \
 	X86InstComments.cpp \
 	X86InstPrinterCommon.cpp \
+	X86ShuffleDecode.cpp \
 	X86AsmBackend.cpp \
 	X86MCTargetDesc.cpp \
 	X86MCAsmInfo.cpp \

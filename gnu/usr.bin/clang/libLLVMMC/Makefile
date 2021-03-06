@@ -29,6 +29,7 @@ SRCS+=	ConstantPools.cpp \
 	MCInstPrinter.cpp \
 	MCInstrAnalysis.cpp \
 	MCInstrDesc.cpp \
+	MCInstrInfo.cpp \
 	MCLabel.cpp \
 	MCLinkerOptimizationHint.cpp \
 	MCMachOStreamer.cpp \
@@ -49,8 +50,11 @@ SRCS+=	ConstantPools.cpp \
 	MCSubtargetInfo.cpp \
 	MCSymbol.cpp \
 	MCSymbolELF.cpp \
+	MCSymbolXCOFF.cpp \
 	MCTargetOptions.cpp \
+	MCTargetOptionsCommandFlags.cpp \
 	MCValue.cpp \
+	MCWasmObjectTargetWriter.cpp \
 	MCWasmStreamer.cpp \
 	MCWin64EH.cpp \
 	MCWinCOFFStreamer.cpp \

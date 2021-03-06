@@ -20,7 +20,7 @@ SRCS=	CXXFunctionPointer.cpp \
 	TypeSummary.cpp \
 	TypeSynthetic.cpp \
 	ValueObjectPrinter.cpp \
-	VectorType.cpp \
+	VectorType.cpp
 
 .PATH:	${.CURDIR}/../../../llvm/lldb/source/DataFormatters
 

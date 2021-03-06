@@ -19,10 +19,10 @@ SRCS+=	ADCE.cpp \
 	EarlyCSE.cpp \
 	FlattenCFGPass.cpp \
 	Float2Int.cpp \
+	GuardWidening.cpp \
 	GVN.cpp \
 	GVNHoist.cpp \
 	GVNSink.cpp \
-	GuardWidening.cpp \
 	IVUsersPrinter.cpp \
 	InductiveRangeCheckElimination.cpp \
 	IndVarSimplify.cpp \
@@ -31,8 +31,9 @@ SRCS+=	ADCE.cpp \
 	JumpThreading.cpp \
 	LICM.cpp \
 	LoopAccessAnalysisPrinter.cpp \
-	LoopDataPrefetch.cpp \
+	LoopSink.cpp \
 	LoopDeletion.cpp \
+	LoopDataPrefetch.cpp \
 	LoopDistribute.cpp \
 	LoopFuse.cpp \
 	LoopIdiomRecognize.cpp \
@@ -44,10 +45,9 @@ SRCS+=	ADCE.cpp \
 	LoopRerollPass.cpp \
 	LoopRotation.cpp \
 	LoopSimplifyCFG.cpp \
-	LoopSink.cpp \
 	LoopStrengthReduce.cpp \
-	LoopUnrollAndJamPass.cpp \
 	LoopUnrollPass.cpp \
+	LoopUnrollAndJamPass.cpp \
 	LoopUnswitch.cpp \
 	LoopVersioningLICM.cpp \
 	LowerAtomic.cpp \
@@ -75,8 +75,8 @@ SRCS+=	ADCE.cpp \
 	SimpleLoopUnswitch.cpp \
 	SimplifyCFGPass.cpp \
 	Sink.cpp \
-	SpeculateAroundPHIs.cpp \
 	SpeculativeExecution.cpp \
+	SpeculateAroundPHIs.cpp \
 	StraightLineStrengthReduce.cpp \
 	StructurizeCFG.cpp \
 	TailRecursionElimination.cpp \

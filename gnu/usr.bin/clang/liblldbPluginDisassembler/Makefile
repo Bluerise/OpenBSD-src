@@ -7,7 +7,7 @@ NOPROFILE=
 .include <bsd.own.mk>
 SRCS=	DisassemblerLLVMC.cpp
 
-.PATH:	${.CURDIR}/../../../llvm/lldb/source/Plugins/Disassembler/llvm
+.PATH:	${.CURDIR}/../../../llvm/lldb/source/Plugins/Disassembler/LLVMC
 
 install:
 	@# Nothing here so far ...

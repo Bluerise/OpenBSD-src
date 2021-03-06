@@ -5,21 +5,27 @@ NOPIC=
 NOPROFILE=
 
 .include <bsd.own.mk>
-SRCS=	AppleObjCClassDescriptorV2.cpp \
-	AppleObjCDeclVendor.cpp \
+
+# CPlusPlus
+SRCS+= CPPLanguageRuntime.cpp \
+	ItaniumABILanguageRuntime.cpp
+
+# ObjC
+SRCS+=	ObjCLanguageRuntime.cpp \
 	AppleObjCRuntime.cpp \
 	AppleObjCRuntimeV1.cpp \
 	AppleObjCRuntimeV2.cpp \
 	AppleObjCTrampolineHandler.cpp \
-	AppleObjCTypeEncodingParser.cpp \
+	AppleObjCDeclVendor.cpp \
 	AppleThreadPlanStepThroughObjCTrampoline.cpp \
-	CPPLanguageRuntime.cpp \
-	ItaniumABILanguageRuntime.cpp \
-	ObjCLanguageRuntime.cpp \
+	AppleObjCClassDescriptorV2.cpp \
+	AppleObjCTypeEncodingParser.cpp
+
+# RenderScript
+SRCS+=	RenderScriptRuntime.cpp \
 	RenderScriptExpressionOpts.cpp \
-	RenderScriptRuntime.cpp \
-	RenderScriptScriptGroup.cpp \
 	RenderScriptx86ABIFixups.cpp \
+	RenderScriptScriptGroup.cpp
 
 .PATH:	${.CURDIR}/../../../llvm/lldb/source/Plugins/LanguageRuntime/CPlusPlus
 .PATH:	${.CURDIR}/../../../llvm/lldb/source/Plugins/LanguageRuntime/CPlusPlus/ItaniumABI

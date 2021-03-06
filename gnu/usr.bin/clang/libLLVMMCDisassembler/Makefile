@@ -7,6 +7,6 @@ SRCS+=	Disassembler.cpp \
 	MCDisassembler.cpp \
 	MCExternalSymbolizer.cpp \
 	MCRelocationInfo.cpp \
-	MCSymbolizer.cpp \
+	MCSymbolizer.cpp
 
 .PATH:	${.CURDIR}/../../../llvm/llvm/lib/MC/MCDisassembler

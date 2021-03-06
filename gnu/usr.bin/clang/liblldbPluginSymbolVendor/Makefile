@@ -5,9 +5,11 @@ NOPIC=
 NOPROFILE=
 
 .include <bsd.own.mk>
-SRCS=	SymbolVendorELF.cpp
+SRCS=	SymbolVendorELF.cpp \
+	SymbolVendorWasm.cpp
 
 .PATH:	${.CURDIR}/../../../llvm/lldb/source/Plugins/SymbolVendor/ELF
+.PATH:	${.CURDIR}/../../../llvm/lldb/source/Plugins/SymbolVendor/wasm
 
 install:
 	@# Nothing here so far ...

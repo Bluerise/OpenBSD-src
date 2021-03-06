@@ -14,7 +14,7 @@ SRCS=	Args.cpp \
 	Reproduce.cpp \
 	Strings.cpp \
 	TargetOptionsCommandFlags.cpp \
-	Threads.cpp \
+	Timer.cpp \
 	Version.cpp
 
 .PATH:	${.CURDIR}/../../../llvm/lld/Common

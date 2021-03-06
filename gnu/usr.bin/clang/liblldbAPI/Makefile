@@ -15,18 +15,20 @@ SRCS=	SBAddress.cpp \
 	SBBreakpointOptionCommon.cpp \
 	SBBroadcaster.cpp \
 	SBCommandInterpreter.cpp \
+	SBCommandInterpreterRunOptions.cpp \
 	SBCommandReturnObject.cpp \
 	SBCommunication.cpp \
 	SBCompileUnit.cpp \
 	SBData.cpp \
 	SBDebugger.cpp \
 	SBDeclaration.cpp \
+	SBEnvironment.cpp \
 	SBError.cpp \
 	SBEvent.cpp \
 	SBExecutionContext.cpp \
 	SBExpressionOptions.cpp \
-	SBFile.cpp \
 	SBFileSpec.cpp \
+	SBFile.cpp \
 	SBFileSpecList.cpp \
 	SBFrame.cpp \
 	SBFunction.cpp \
@@ -69,11 +71,11 @@ SRCS=	SBAddress.cpp \
 	SBTypeNameSpecifier.cpp \
 	SBTypeSummary.cpp \
 	SBTypeSynthetic.cpp \
-	SBUnixSignals.cpp \
 	SBValue.cpp \
 	SBValueList.cpp \
 	SBVariablesOptions.cpp \
 	SBWatchpoint.cpp \
+	SBUnixSignals.cpp \
 	SystemInitializerFull.cpp
 
 .PATH:	${.CURDIR}/../../../llvm/lldb/source/API
@@ -85,3 +87,4 @@ install:
 
 CPPFLAGS+=	${LLDB_INCLUDES}
 CPPFLAGS+=	${CLANG_INCLUDES}
+CPPFLAGS+=	-I${.CURDIR}/../include/lldb/

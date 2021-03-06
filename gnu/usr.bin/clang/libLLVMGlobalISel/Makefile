@@ -3,15 +3,18 @@
 LIB=	LLVMGlobalISel
 NOPROFILE=
 
+CPPFLAGS+=-I${LLVM_SRC}/include/llvm/CodeGen/GlobalISel
+
 SRCS+=	CSEInfo.cpp \
+	GISelKnownBits.cpp \
 	CSEMIRBuilder.cpp \
 	CallLowering.cpp \
 	GlobalISel.cpp \
-	GISelChangeObserver.cpp \
-	GISelKnownBits.cpp \
 	Combiner.cpp \
 	CombinerHelper.cpp \
+	GISelChangeObserver.cpp \
 	IRTranslator.cpp \
+	InlineAsmLowering.cpp \
 	InstructionSelect.cpp \
 	InstructionSelector.cpp \
 	LegalityPredicates.cpp \
@@ -20,6 +23,7 @@ SRCS+=	CSEInfo.cpp \
 	LegalizerHelper.cpp \
 	LegalizerInfo.cpp \
 	Localizer.cpp \
+	LostDebugLocObserver.cpp \
 	MachineIRBuilder.cpp \
 	RegBankSelect.cpp \
 	RegisterBank.cpp \

@@ -37,6 +37,7 @@ SRCS+=	AbstractCallSite.cpp \
 	IntrinsicInst.cpp \
 	LLVMContext.cpp \
 	LLVMContextImpl.cpp \
+	LLVMRemarkStreamer.cpp \
 	LegacyPassManager.cpp \
 	MDBuilder.cpp \
 	Mangler.cpp \
@@ -50,9 +51,8 @@ SRCS+=	AbstractCallSite.cpp \
 	PassManager.cpp \
 	PassRegistry.cpp \
 	PassTimingInfo.cpp \
-	ProfileSummary.cpp \
-	RemarkStreamer.cpp \
 	SafepointIRVerifier.cpp \
+	ProfileSummary.cpp \
 	Statepoint.cpp \
 	Type.cpp \
 	TypeFinder.cpp \

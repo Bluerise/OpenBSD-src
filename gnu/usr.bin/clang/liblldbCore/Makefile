@@ -49,7 +49,7 @@ SRCS=	Address.cpp \
 	ValueObjectMemory.cpp \
 	ValueObjectRegister.cpp \
 	ValueObjectSyntheticFilter.cpp \
-	ValueObjectVariable.cpp \
+	ValueObjectVariable.cpp
 
 .PATH:	${.CURDIR}/../../../llvm/lldb/source/Core
 

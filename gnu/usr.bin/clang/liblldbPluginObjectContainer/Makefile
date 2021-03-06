@@ -6,7 +6,7 @@ NOPROFILE=
 
 .include <bsd.own.mk>
 SRCS=	ObjectContainerBSDArchive.cpp \
-	ObjectContainerUniversalMachO.cpp \
+	ObjectContainerUniversalMachO.cpp
 
 .PATH:	${.CURDIR}/../../../llvm/lldb/source/Plugins/ObjectContainer/BSD-Archive
 .PATH:	${.CURDIR}/../../../llvm/lldb/source/Plugins/ObjectContainer/Universal-Mach-O

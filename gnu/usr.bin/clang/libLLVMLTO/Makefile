@@ -8,8 +8,8 @@ CPPFLAGS+=	-I${LLVM_SRCS}/include/llvm/LTO
 SRCS+=	Caching.cpp \
 	LTO.cpp \
 	LTOBackend.cpp \
-	LTOCodeGenerator.cpp \
 	LTOModule.cpp \
+	LTOCodeGenerator.cpp \
 	SummaryBasedOptimizations.cpp \
 	UpdateCompilerUsed.cpp \
 	ThinLTOCodeGenerator.cpp

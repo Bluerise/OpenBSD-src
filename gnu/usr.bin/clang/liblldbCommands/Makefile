@@ -34,7 +34,7 @@ SRCS=	CommandCompletions.cpp \
 	CommandObjectVersion.cpp \
 	CommandObjectWatchpoint.cpp \
 	CommandObjectWatchpointCommand.cpp \
-	CommandObjectLanguage.cpp \
+	CommandObjectLanguage.cpp
 
 .PATH:	${.CURDIR}/../../../llvm/lldb/source/Commands
 

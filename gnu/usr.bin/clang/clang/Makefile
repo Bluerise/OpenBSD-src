@@ -33,7 +33,6 @@ LLVM_LIBDEPS=	LLVM \
 		clangFrontendTool \
 		clangFrontend \
 		clangDriver \
-		clangDriverArch \
 		clangSerialization \
 		clangCodeGen \
 		clangParse \
@@ -44,7 +43,6 @@ LLVM_LIBDEPS=	LLVM \
 		clangEdit \
 		clangAST \
 		clangLex \
-		clangBasic \
-		clangBasicTargets
+		clangBasic
 
 .include <bsd.prog.mk>

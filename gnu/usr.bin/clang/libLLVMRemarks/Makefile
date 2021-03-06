@@ -10,6 +10,7 @@ SRCS+=	BitstreamRemarkParser.cpp \
 	RemarkLinker.cpp \
 	RemarkParser.cpp \
 	RemarkSerializer.cpp \
+	RemarkStreamer.cpp \
 	RemarkStringTable.cpp \
 	YAMLRemarkParser.cpp \
 	YAMLRemarkSerializer.cpp

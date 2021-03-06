@@ -25,7 +25,6 @@ SRCS=	ASTConsumers.cpp \
 	HeaderIncludeGen.cpp \
 	InitHeaderSearch.cpp \
 	InitPreprocessor.cpp \
-	InterfaceStubFunctionsConsumer.cpp \
 	LayoutOverrideSource.cpp \
 	LogDiagnosticPrinter.cpp \
 	ModuleDependencyCollector.cpp \
@@ -38,7 +37,8 @@ SRCS=	ASTConsumers.cpp \
 	TextDiagnostic.cpp \
 	TextDiagnosticBuffer.cpp \
 	TextDiagnosticPrinter.cpp \
-	VerifyDiagnosticConsumer.cpp
+	VerifyDiagnosticConsumer.cpp \
+	InterfaceStubFunctionsConsumer.cpp
 
 .PATH:	${.CURDIR}/../../../llvm/clang/lib/Frontend
 

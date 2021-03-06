@@ -10,11 +10,11 @@ SRCS+=	AArch64AsmBackend.cpp \
 	AArch64ELFObjectWriter.cpp \
 	AArch64ELFStreamer.cpp \
 	AArch64InstPrinter.cpp \
-	AArch64MachObjectWriter.cpp \
 	AArch64MCAsmInfo.cpp \
 	AArch64MCCodeEmitter.cpp \
 	AArch64MCExpr.cpp \
 	AArch64MCTargetDesc.cpp \
+	AArch64MachObjectWriter.cpp \
 	AArch64TargetStreamer.cpp \
 	AArch64WinCOFFObjectWriter.cpp \
 	AArch64WinCOFFStreamer.cpp

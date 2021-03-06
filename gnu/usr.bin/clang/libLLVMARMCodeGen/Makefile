@@ -18,20 +18,20 @@ SRCS+=	A15SDOptimizer.cpp \
 	ARMFastISel.cpp \
 	ARMFrameLowering.cpp \
 	ARMHazardRecognizer.cpp \
+	ARMInstructionSelector.cpp \
 	ARMISelDAGToDAG.cpp \
 	ARMISelLowering.cpp \
 	ARMInstrInfo.cpp \
-	ARMInstructionSelector.cpp \
 	ARMLegalizerInfo.cpp \
+	ARMParallelDSP.cpp \
 	ARMLoadStoreOptimizer.cpp \
 	ARMLowOverheadLoops.cpp \
 	ARMMCInstLower.cpp \
 	ARMMachineFunctionInfo.cpp \
 	ARMMacroFusion.cpp \
-	ARMParallelDSP.cpp \
-	ARMRegisterBankInfo.cpp \
 	ARMRegisterInfo.cpp \
 	ARMOptimizeBarriersPass.cpp \
+	ARMRegisterBankInfo.cpp \
 	ARMSelectionDAGInfo.cpp \
 	ARMSubtarget.cpp \
 	ARMTargetMachine.cpp \
@@ -41,6 +41,7 @@ SRCS+=	A15SDOptimizer.cpp \
 	MVEGatherScatterLowering.cpp \
 	MVETailPredication.cpp \
 	MVEVPTBlockPass.cpp \
+	MVEVPTOptimisationsPass.cpp \
 	Thumb1FrameLowering.cpp \
 	Thumb1InstrInfo.cpp \
 	ThumbRegisterInfo.cpp \

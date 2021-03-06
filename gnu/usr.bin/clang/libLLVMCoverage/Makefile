@@ -6,7 +6,7 @@ NOPROFILE=
 CPPFLAGS+=	-I${LLVM_SRCS}/include/llvm/ProfileData/Coverage
 
 SRCS+=	CoverageMapping.cpp \
-	CoverageMappingReader.cpp \
-	CoverageMappingWriter.cpp
+	CoverageMappingWriter.cpp \
+	CoverageMappingReader.cpp
 
 .PATH:	${.CURDIR}/../../../llvm/llvm/lib/ProfileData/Coverage

@@ -34,7 +34,6 @@ SRCS=	ArchSpec.cpp \
 	ReproducerInstrumentation.cpp \
 	Scalar.cpp \
 	SelectHelper.cpp \
-	SharingPtr.cpp \
 	State.cpp \
 	Status.cpp \
 	Stream.cpp \
@@ -53,6 +52,7 @@ SRCS=	ArchSpec.cpp \
 	UserIDResolver.cpp \
 	VASprintf.cpp \
 	VMRange.cpp \
+	XcodeSDK.cpp
 
 .PATH:	${.CURDIR}/../../../llvm/lldb/source/Utility
 

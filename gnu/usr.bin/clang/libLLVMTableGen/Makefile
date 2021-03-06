@@ -8,8 +8,8 @@ CPPFLAGS+=	-I${LLVM_SRCS}/include/llvm/TableGen
 
 .include <bsd.own.mk>
 SRCS=	TableGenError.cpp \
-	Main.cpp \
 	JSONBackend.cpp \
+	Main.cpp \
 	Record.cpp \
 	SetTheory.cpp \
 	StringMatcher.cpp \

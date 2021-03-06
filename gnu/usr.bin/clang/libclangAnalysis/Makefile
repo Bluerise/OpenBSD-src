@@ -13,6 +13,7 @@ SRCS=	AnalysisDeclContext.cpp \
 	CFGReachabilityAnalysis.cpp \
 	CFGStmtMap.cpp \
 	CallGraph.cpp \
+	CloneDetection.cpp \
 	CocoaConventions.cpp \
 	ConstructionContext.cpp \
 	Consumed.cpp \

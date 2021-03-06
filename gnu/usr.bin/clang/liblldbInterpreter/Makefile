@@ -49,7 +49,7 @@ SRCS=	CommandAlias.cpp \
 	OptionGroupWatchpoint.cpp \
 	Options.cpp \
 	Property.cpp \
-	ScriptInterpreter.cpp \
+	ScriptInterpreter.cpp
 
 .PATH:	${.CURDIR}/../../../llvm/lldb/source/Interpreter
 

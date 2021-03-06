@@ -6,11 +6,12 @@ NOPROFILE=
 
 .include <bsd.own.mk>
 SRCS=	ABI.cpp \
+	AssertFrameRecognizer.cpp \
 	ExecutionContext.cpp \
-	JITLoader.cpp \
-	JITLoaderList.cpp \
 	InstrumentationRuntime.cpp \
 	InstrumentationRuntimeStopInfo.cpp \
+	JITLoader.cpp \
+	JITLoaderList.cpp \
 	Language.cpp \
 	LanguageRuntime.cpp \
 	Memory.cpp \
@@ -25,6 +26,7 @@ SRCS=	ABI.cpp \
 	QueueItem.cpp \
 	QueueList.cpp \
 	RegisterContext.cpp \
+	RegisterContextUnwind.cpp \
 	RegisterNumber.cpp \
 	RemoteAwarePlatform.cpp \
 	SectionLoadHistory.cpp \
@@ -59,9 +61,11 @@ SRCS=	ABI.cpp \
 	ThreadPlanStepThrough.cpp \
 	ThreadPlanStepUntil.cpp \
 	ThreadPlanTracer.cpp \
+	ThreadPlanStack.cpp \
 	ThreadSpec.cpp \
 	UnixSignals.cpp \
 	UnwindAssembly.cpp \
+	UnwindLLDB.cpp
 
 .PATH:	${.CURDIR}/../../../llvm/lldb/source/Target
 

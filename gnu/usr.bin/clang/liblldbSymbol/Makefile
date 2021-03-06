@@ -7,17 +7,11 @@ NOPROFILE=
 .include <bsd.own.mk>
 SRCS=	ArmUnwindInfo.cpp \
 	Block.cpp \
-	ClangASTContext.cpp \
-	ClangASTImporter.cpp \
-	ClangASTMetadata.cpp \
-	ClangExternalASTSourceCallbacks.cpp \
-	ClangUtil.cpp \
 	CompactUnwindInfo.cpp \
 	CompileUnit.cpp \
 	CompilerDecl.cpp \
 	CompilerDeclContext.cpp \
 	CompilerType.cpp \
-	CxxModuleHandler.cpp \
 	DWARFCallFrameInfo.cpp \
 	DebugMacros.cpp \
 	Declaration.cpp \
@@ -41,7 +35,7 @@ SRCS=	ArmUnwindInfo.cpp \
 	UnwindPlan.cpp \
 	UnwindTable.cpp \
 	Variable.cpp \
-	VariableList.cpp \
+	VariableList.cpp
 
 .PATH:	${.CURDIR}/../../../llvm/lldb/source/Symbol
 

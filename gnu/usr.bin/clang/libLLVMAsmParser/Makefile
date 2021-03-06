@@ -3,7 +3,7 @@
 LIB=	LLVMAsmParser
 NOPROFILE=
 
-CPPFLAGS+=	-I${LLVM_SRCS}/include/llvm/Analysis
+CPPFLAGS+=	-I${LLVM_SRCS}/include/llvm/ASMParser
 
 SRCS+=	LLLexer.cpp \
 	LLParser.cpp \

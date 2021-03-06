@@ -23,7 +23,7 @@ SRCS+=	AppendingTypeTableBuilder.cpp \
 	DebugSubsectionVisitor.cpp \
 	DebugSymbolRVASubsection.cpp \
 	DebugSymbolsSubsection.cpp \
-	DebugInfoCodeViewEnumTables.cpp \
+	EnumTables.cpp \
 	Formatters.cpp \
 	GlobalTypeTableBuilder.cpp \
 	LazyRandomTypeCollection.cpp \

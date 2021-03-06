@@ -20,6 +20,7 @@ SRCS=	ASTTableGen.cpp \
 	ClangTypeNodesEmitter.cpp \
 	MveEmitter.cpp \
 	NeonEmitter.cpp \
+	SveEmitter.cpp \
 	TableGen.cpp
 
 .PATH:	${.CURDIR}/../../../llvm/clang/utils/TableGen

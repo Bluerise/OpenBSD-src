@@ -13,8 +13,8 @@ SRCS+=	PPCAsmBackend.cpp \
 	PPCMCCodeEmitter.cpp \
 	PPCMCExpr.cpp \
 	PPCPredicates.cpp \
-	PPCMachObjectWriter.cpp \
 	PPCELFObjectWriter.cpp \
-	PPCXCOFFObjectWriter.cpp
+	PPCXCOFFObjectWriter.cpp \
+	PPCELFStreamer.cpp
 
 .PATH:	${.CURDIR}/../../../llvm/llvm/lib/Target/PowerPC/MCTargetDesc

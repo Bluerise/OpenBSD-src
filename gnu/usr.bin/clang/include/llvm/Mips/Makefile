@@ -4,13 +4,20 @@
 
 LLVM_SRCS=	${.CURDIR}/../../../../../llvm/llvm
 
-HDRS=	MipsGenAsmMatcher.inc MipsGenAsmWriter.inc \
-	MipsGenCallingConv.inc MipsGenDAGISel.inc \
-	MipsGenDisassemblerTables.inc MipsGenFastISel.inc \
-	MipsGenGlobalISel.inc MipsGenInstrInfo.inc \
-	MipsGenMCCodeEmitter.inc MipsGenMCPseudoLowering.inc \
-	MipsGenSubtargetInfo.inc MipsGenRegisterBank.inc \
-	MipsGenRegisterInfo.inc
+HDRS=	MipsGenAsmMatcher.inc \
+	MipsGenAsmWriter.inc \
+	MipsGenCallingConv.inc \
+	MipsGenDAGISel.inc \
+	MipsGenDisassemblerTables.inc \
+	MipsGenFastISel.inc \
+	MipsGenGlobalISel.inc \
+	MipsGenInstrInfo.inc \
+	MipsGenMCCodeEmitter.inc \
+	MipsGenMCPseudoLowering.inc \
+	MipsGenRegisterBank.inc \
+	MipsGenRegisterInfo.inc \
+	MipsGenSubtargetInfo.inc \
+	MipsGenExegesis.inc
 
 all: ${HDRS}
 
@@ -82,6 +89,11 @@ MipsGenRegisterInfo.inc: ${LLVM_SRCS}/lib/Target/Mips/Mips.td
 
 MipsGenSubtargetInfo.inc: ${LLVM_SRCS}/lib/Target/Mips/Mips.td
 	${.OBJDIR}/../../../llvm-tblgen/llvm-tblgen -gen-subtarget \
+		-I${LLVM_SRCS}/include -I${LLVM_SRCS}/lib/Target/Mips \
+		-o ${.TARGET} ${.ALLSRC}
+
+MipsGenExegesis.inc: ${LLVM_SRCS}/lib/Target/Mips/Mips.td
+	${.OBJDIR}/../../../llvm-tblgen/llvm-tblgen -gen-exegesis \
 		-I${LLVM_SRCS}/include -I${LLVM_SRCS}/lib/Target/Mips \
 		-o ${.TARGET} ${.ALLSRC}
 

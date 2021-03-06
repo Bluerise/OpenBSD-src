@@ -7,8 +7,7 @@ CPPFLAGS+=	-I${LLVM_SRCS}/include/llvm/Transforms
 CPPFLAGS+=	-I${LLVM_SRCS}/include/llvm/Transforms/InstCombine
 CPPFLAGS+=	-I${.OBJDIR}/../include/llvm/Transforms/InstCombine
 
-SRCS+=	AggressiveInstCombine.cpp \
-	InstructionCombining.cpp \
+SRCS+=	InstructionCombining.cpp \
 	InstCombineAddSub.cpp \
 	InstCombineAtomicRMW.cpp \
 	InstCombineAndOrXor.cpp \
@@ -17,12 +16,11 @@ SRCS+=	AggressiveInstCombine.cpp \
 	InstCombineCompares.cpp \
 	InstCombineLoadStoreAlloca.cpp \
 	InstCombineMulDivRem.cpp \
+	InstCombineNegator.cpp \
 	InstCombinePHI.cpp \
 	InstCombineSelect.cpp \
 	InstCombineShifts.cpp \
 	InstCombineSimplifyDemanded.cpp \
-	InstCombineVectorOps.cpp \
-	TruncInstCombine.cpp
+	InstCombineVectorOps.cpp
 
 .PATH:	${.CURDIR}/../../../llvm/llvm/lib/Transforms/InstCombine
-.PATH:	${.CURDIR}/../../../llvm/llvm/lib/Transforms/AggressiveInstCombine

@@ -18,7 +18,7 @@ SRCS=	DiagnosticManager.cpp \
 	Materializer.cpp \
 	REPL.cpp \
 	UserExpression.cpp \
-	UtilityFunction.cpp \
+	UtilityFunction.cpp
 
 .PATH:	${.CURDIR}/../../../llvm/lldb/source/Expression
 

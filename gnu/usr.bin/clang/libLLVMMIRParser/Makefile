@@ -3,6 +3,8 @@
 LIB=	LLVMMIRParser
 NOPROFILE=
 
+CPPFLAGS+=-I${LLVM_SRC}/include/llvm/CodeGen/MIRParser
+
 SRCS+=	MILexer.cpp \
 	MIParser.cpp \
 	MIRParser.cpp
