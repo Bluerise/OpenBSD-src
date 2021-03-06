@@ -840,8 +840,7 @@ def fno_record_command_line : Flag<["-"], "fno-record-command-line">,
   Group<f_clang_Group>;
 def : Flag<["-"], "frecord-gcc-switches">, Alias<frecord_command_line>;
 def : Flag<["-"], "fno-record-gcc-switches">, Alias<fno_record_command_line>;
-def fcommon : Flag<["-"], "fcommon">, Group<f_Group>,
-  Flags<[CoreOption, CC1Option]>, HelpText<"Place uninitialized global variables in a common block">;
+def fcommon : Flag<["-"], "fcommon">, Group<f_Group>;
 def fcompile_resource_EQ : Joined<["-"], "fcompile-resource=">, Group<f_Group>;
 def fcomplete_member_pointers : Flag<["-"], "fcomplete-member-pointers">, Group<f_clang_Group>,
    Flags<[CoreOption, CC1Option]>,
@@ -1236,9 +1235,6 @@ def fexperimental_isel : Flag<["-"], "fexperimental-isel">, Group<f_clang_Group>
 def fexperimental_new_pass_manager : Flag<["-"], "fexperimental-new-pass-manager">,
   Group<f_clang_Group>, Flags<[CC1Option]>,
   HelpText<"Enables an experimental new pass manager in LLVM.">;
-def fexperimental_strict_floating_point : Flag<["-"], "fexperimental-strict-floating-point">,
-  Group<f_clang_Group>, Flags<[CC1Option]>,
-  HelpText<"Enables experimental strict floating point in LLVM.">;
 def finput_charset_EQ : Joined<["-"], "finput-charset=">, Group<f_Group>;
 def fexec_charset_EQ : Joined<["-"], "fexec-charset=">, Group<f_Group>;
 def finstrument_functions : Flag<["-"], "finstrument-functions">, Group<f_Group>, Flags<[CC1Option]>,
@@ -1784,14 +1780,6 @@ def ftrivial_auto_var_init : Joined<["-"], "ftrivial-auto-var-init=">, Group<f_G
 def enable_trivial_var_init_zero : Flag<["-"], "enable-trivial-auto-var-init-zero-knowing-it-will-be-removed-from-clang">,
   Flags<[CC1Option, CoreOption]>,
   HelpText<"Trivial automatic variable initialization to zero is only here for benchmarks, it'll eventually be removed, and I'm OK with that because I'm only using it to benchmark">;
-def fno_ret_protector : Flag<["-"], "fno-ret-protector">, Group<f_Group>,
-  HelpText<"Disable return protector">;
-def fret_protector : Flag<["-"], "fret-protector">, Group<f_Group>,
-  HelpText<"Enable return protector">;
-def fno_fixup_gadgets : Flag<["-"], "fno-fixup-gadgets">, Group<f_Group>,
-  HelpText<"Disable FixupGadgets pass (x86 only)">;
-def ffixup_gadgets : Flag<["-"], "ffixup-gadgets">, Group<f_Group>,
-  HelpText<"Replace ROP friendly instructions with safe alternatives (x86 only)">;
 def fstandalone_debug : Flag<["-"], "fstandalone-debug">, Group<f_Group>, Flags<[CoreOption]>,
   HelpText<"Emit full debug info for all types used by the program">;
 def fno_standalone_debug : Flag<["-"], "fno-standalone-debug">, Group<f_Group>, Flags<[CoreOption]>,
@@ -2459,12 +2447,6 @@ def mlongcall: Flag<["-"], "mlongcall">,
     Group<m_ppc_Features_Group>;
 def mno_longcall : Flag<["-"], "mno-longcall">,
     Group<m_ppc_Features_Group>;
-def maix_struct_return : Flag<["-"], "maix-struct-return">,
-  Group<m_Group>, Flags<[CC1Option]>,
-  HelpText<"Return all structs in memory (PPC32 only)">;
-def msvr4_struct_return : Flag<["-"], "msvr4-struct-return">,
-  Group<m_Group>, Flags<[CC1Option]>,
-  HelpText<"Return small structs in registers (PPC32 only)">;
 
 def mvx : Flag<["-"], "mvx">, Group<m_Group>;
 def mno_vx : Flag<["-"], "mno-vx">, Group<m_Group>;
@@ -2537,8 +2519,6 @@ def mno_check_zero_division : Flag<["-"], "mno-check-zero-division">,
                               Group<m_mips_Features_Group>;
 def mcompact_branches_EQ : Joined<["-"], "mcompact-branches=">,
                            Group<m_mips_Features_Group>;
-def mfix_loongson2f_btb : Flag<["-"], "mfix-loongson2f-btb">,
-                          Group<m_mips_Features_Group>;
 def mbranch_likely : Flag<["-"], "mbranch-likely">, Group<m_Group>,
   IgnoredGCCCompat;
 def mno_branch_likely : Flag<["-"], "mno-branch-likely">, Group<m_Group>,
@@ -2747,7 +2727,7 @@ def pthreads : Flag<["-"], "pthreads">;
 def pthread : Flag<["-"], "pthread">, Flags<[CC1Option]>,
   HelpText<"Support POSIX threads in generated code">;
 def no_pthread : Flag<["-"], "no-pthread">, Flags<[CC1Option]>;
-def p : Flag<["-"], "p">, Alias<pg>;
+def p : Flag<["-"], "p">;
 def pie : Flag<["-"], "pie">;
 def static_pie : Flag<["-"], "static-pie">;
 def read__only__relocs : Separate<["-"], "read_only_relocs">;
@@ -3220,8 +3200,6 @@ def mshstk : Flag<["-"], "mshstk">, Group<m_x86_Features_Group>;
 def mno_shstk : Flag<["-"], "mno-shstk">, Group<m_x86_Features_Group>;
 def mretpoline_external_thunk : Flag<["-"], "mretpoline-external-thunk">, Group<m_x86_Features_Group>;
 def mno_retpoline_external_thunk : Flag<["-"], "mno-retpoline-external-thunk">, Group<m_x86_Features_Group>;
-def msave_args : Flag<["-"], "msave-args">, Group<m_x86_Features_Group>;
-def mno_save_args : Flag<["-"], "mno-save-args">, Group<m_x86_Features_Group>;
 def mvzeroupper : Flag<["-"], "mvzeroupper">, Group<m_x86_Features_Group>;
 def mno_vzeroupper : Flag<["-"], "mno-vzeroupper">, Group<m_x86_Features_Group>;
 

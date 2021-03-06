@@ -808,7 +808,7 @@ static bool ParseCodeGenArgs(CodeGenOptions &Opts, ArgList &Args, InputKind IK,
   Opts.DwarfDebugFlags = Args.getLastArgValue(OPT_dwarf_debug_flags);
   Opts.RecordCommandLine = Args.getLastArgValue(OPT_record_command_line);
   Opts.MergeAllConstants = Args.hasArg(OPT_fmerge_all_constants);
-  Opts.NoCommon = !Args.hasArg(OPT_fcommon);
+  Opts.NoCommon = Args.hasArg(OPT_fno_common);
   Opts.NoInlineLineTables = Args.hasArg(OPT_gno_inline_line_tables);
   Opts.NoImplicitFloat = Args.hasArg(OPT_no_implicit_float);
   Opts.OptimizeSize = getOptimizationLevelSize(Args);
@@ -1218,8 +1218,6 @@ static bool ParseCodeGenArgs(CodeGenOptions &Opts, ArgList &Args, InputKind IK,
     Opts.StackAlignment = StackAlignment;
   }
 
-  Opts.ReturnProtector = Args.hasArg(OPT_ret_protector);
-
   if (Arg *A = Args.getLastArg(OPT_mstack_probe_size)) {
     StringRef Val = A->getValue();
     unsigned StackProbeSize = Opts.StackProbeSize;
@@ -1281,18 +1279,11 @@ static bool ParseCodeGenArgs(CodeGenOptions &Opts, ArgList &Args, InputKind IK,
       Diags.Report(diag::err_drv_invalid_value) << A->getAsString(Args) << Val;
   }
 
-  // X86_32 has -fppc-struct-return and -freg-struct-return.
-  // PPC32 has -maix-struct-return and -msvr4-struct-return.
-  if (Arg *A =
-          Args.getLastArg(OPT_fpcc_struct_return, OPT_freg_struct_return,
-                          OPT_maix_struct_return, OPT_msvr4_struct_return)) {
-    const Option &O = A->getOption();
-    if (O.matches(OPT_fpcc_struct_return) ||
-        O.matches(OPT_maix_struct_return)) {
+  if (Arg *A = Args.getLastArg(OPT_fpcc_struct_return, OPT_freg_struct_return)) {
+    if (A->getOption().matches(OPT_fpcc_struct_return)) {
       Opts.setStructReturnConvention(CodeGenOptions::SRCK_OnStack);
     } else {
-      assert(O.matches(OPT_freg_struct_return) ||
-             O.matches(OPT_msvr4_struct_return));
+      assert(A->getOption().matches(OPT_freg_struct_return));
       Opts.setStructReturnConvention(CodeGenOptions::SRCK_InRegs);
     }
   }
@@ -3174,9 +3165,6 @@ static void ParseLangArgs(LangOptions &Opts, ArgList &Args, InputKind IK,
     else
       Diags.Report(diag::err_drv_invalid_value) << A->getAsString(Args) << Val;
   }
-
-  if (Args.hasArg(OPT_fexperimental_strict_floating_point))
-    Opts.ExpStrictFP = true;
 
   LangOptions::FPRoundingModeKind FPRM = LangOptions::FPR_ToNearest;
   if (Args.hasArg(OPT_frounding_math)) {

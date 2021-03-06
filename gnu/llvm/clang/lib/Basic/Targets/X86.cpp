@@ -855,8 +855,6 @@ bool X86TargetInfo::handleTargetFeatures(std::vector<std::string> &Features,
       HasPTWRITE = true;
     } else if (Feature == "+invpcid") {
       HasINVPCID = true;
-    } else if (Feature == "+save-args") {
-      HasSaveArgs = true;
     } else if (Feature == "+enqcmd") {
       HasENQCMD = true;
     }
@@ -1462,7 +1460,6 @@ bool X86TargetInfo::hasFeature(StringRef Feature) const {
       .Case("movbe", HasMOVBE)
       .Case("movdiri", HasMOVDIRI)
       .Case("movdir64b", HasMOVDIR64B)
-      .Case("save-args", HasSaveArgs)
       .Case("mwaitx", HasMWAITX)
       .Case("pclmul", HasPCLMUL)
       .Case("pconfig", HasPCONFIG)

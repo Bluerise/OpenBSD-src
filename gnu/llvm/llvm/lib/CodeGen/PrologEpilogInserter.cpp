@@ -217,10 +217,6 @@ bool PEI::runOnMachineFunction(MachineFunction &MF) {
   const Function &F = MF.getFunction();
   const TargetRegisterInfo *TRI = MF.getSubtarget().getRegisterInfo();
   const TargetFrameLowering *TFI = MF.getSubtarget().getFrameLowering();
-  const ReturnProtectorLowering *RPL = TFI->getReturnProtector();
-
-  if (RPL)
-      RPL->setupReturnProtector(MF);
 
   RS = TRI->requiresRegisterScavenging(MF) ? new RegScavenger() : nullptr;
   FrameIndexVirtualScavenging = TRI->requiresFrameIndexScavenging(MF);
@@ -258,10 +254,6 @@ bool PEI::runOnMachineFunction(MachineFunction &MF) {
   // and MaxCallFrameSize variables.
   if (!F.hasFnAttribute(Attribute::Naked))
     insertPrologEpilogCode(MF);
-
-  // Add Return Protectors if using them
-  if (RPL)
-      RPL->insertReturnProtectors(MF);
 
   // Reinsert stashed debug values at the start of the entry blocks.
   for (auto &I : EntryDbgValues)
@@ -357,9 +349,7 @@ void PEI::calculateCallFrameInfo(MachineFunction &MF) {
 /// Compute the sets of entry and return blocks for saving and restoring
 /// callee-saved registers, and placing prolog and epilog code.
 void PEI::calculateSaveRestoreBlocks(MachineFunction &MF) {
-  MachineFrameInfo &MFI = MF.getFrameInfo();
-  const TargetFrameLowering *TFI = MF.getSubtarget().getFrameLowering();
-  const ReturnProtectorLowering *RPL = TFI->getReturnProtector();
+  const MachineFrameInfo &MFI = MF.getFrameInfo();
 
   // Even when we do not change any CSR, we still want to insert the
   // prologue and epilogue of the function.
@@ -375,18 +365,7 @@ void PEI::calculateSaveRestoreBlocks(MachineFunction &MF) {
     // epilogue.
     if (!RestoreBlock->succ_empty() || RestoreBlock->isReturnBlock())
       RestoreBlocks.push_back(RestoreBlock);
-
-    // If we are adding return protectors ensure we can find a free register
-    if (RPL &&
-       !RPL->determineReturnProtectorRegister(MF, SaveBlocks, RestoreBlocks)) {
-      // Shrinkwrapping will prevent finding a free register
-      SaveBlocks.clear();
-      RestoreBlocks.clear();
-      MFI.setSavePoint(nullptr);
-      MFI.setRestorePoint(nullptr);
-    } else {
-      return;
-    }
+    return;
   }
 
   // Save refs to entry and return blocks.
@@ -397,9 +376,6 @@ void PEI::calculateSaveRestoreBlocks(MachineFunction &MF) {
     if (MBB.isReturnBlock())
       RestoreBlocks.push_back(&MBB);
   }
-
-  if (RPL)
-    RPL->determineReturnProtectorRegister(MF, SaveBlocks, RestoreBlocks);
 }
 
 static void assignCalleeSavedSpillSlots(MachineFunction &F,
@@ -421,10 +397,6 @@ static void assignCalleeSavedSpillSlots(MachineFunction &F,
 
   const TargetFrameLowering *TFI = F.getSubtarget().getFrameLowering();
   MachineFrameInfo &MFI = F.getFrameInfo();
-
-  if (TFI->getReturnProtector())
-      TFI->getReturnProtector()->saveReturnProtectorRegister(F, CSI);
-
   if (!TFI->assignCalleeSavedSpillSlots(F, RegInfo, CSI)) {
     // If target doesn't implement this, use generic code.
 

@@ -12,7 +12,6 @@
 #ifndef LLVM_LIB_TARGET_POWERPC_PPCFRAMELOWERING_H
 #define LLVM_LIB_TARGET_POWERPC_PPCFRAMELOWERING_H
 
-#include "PPCReturnProtectorLowering.h"
 #include "llvm/ADT/STLExtras.h"
 #include "llvm/CodeGen/TargetFrameLowering.h"
 #include "llvm/Target/TargetMachine.h"
@@ -171,9 +170,6 @@ public:
   /// function prologue/epilogue.
   bool canUseAsPrologue(const MachineBasicBlock &MBB) const override;
   bool canUseAsEpilogue(const MachineBasicBlock &MBB) const override;
-
-  const PPCReturnProtectorLowering RPL;
-  const ReturnProtectorLowering *getReturnProtector() const override;
 };
 } // End llvm namespace
 

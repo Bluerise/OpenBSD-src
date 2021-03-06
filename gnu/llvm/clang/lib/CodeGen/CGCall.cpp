@@ -1986,9 +1986,6 @@ void CodeGenModule::ConstructAttributeList(
     FuncAttrs.addAttribute("disable-tail-calls",
                            llvm::toStringRef(DisableTailCalls));
     GetCPUAndFeaturesAttributes(CalleeInfo.getCalleeDecl(), FuncAttrs);
-
-    if (CodeGenOpts.ReturnProtector)
-      FuncAttrs.addAttribute("ret-protector");
   }
 
   ClangToLLVMArgMapping IRFunctionArgs(getContext(), FI);

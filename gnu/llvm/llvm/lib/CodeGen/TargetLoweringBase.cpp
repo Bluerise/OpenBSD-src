@@ -1774,10 +1774,7 @@ Value *TargetLoweringBase::getIRStackGuard(IRBuilder<> &IRB) const {
   if (getTargetMachine().getTargetTriple().isOSOpenBSD()) {
     Module &M = *IRB.GetInsertBlock()->getParent()->getParent();
     PointerType *PtrTy = Type::getInt8PtrTy(M.getContext());
-    Constant *C = M.getOrInsertGlobal("__guard_local", PtrTy);
-    if (GlobalVariable *G = dyn_cast_or_null<GlobalVariable>(C))
-      G->setVisibility(GlobalValue::HiddenVisibility);
-    return C;
+    return M.getOrInsertGlobal("__guard_local", PtrTy);
   }
   return nullptr;
 }

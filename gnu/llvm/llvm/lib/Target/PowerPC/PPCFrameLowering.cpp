@@ -14,7 +14,6 @@
 #include "PPCInstrBuilder.h"
 #include "PPCInstrInfo.h"
 #include "PPCMachineFunctionInfo.h"
-#include "PPCReturnProtectorLowering.h"
 #include "PPCSubtarget.h"
 #include "PPCTargetMachine.h"
 #include "llvm/ADT/Statistic.h"
@@ -2462,8 +2461,4 @@ bool PPCFrameLowering::enableShrinkWrapping(const MachineFunction &MF) const {
     return false;
   return (MF.getSubtarget<PPCSubtarget>().isSVR4ABI() &&
           MF.getSubtarget<PPCSubtarget>().isPPC64());
-}
-
-const ReturnProtectorLowering *PPCFrameLowering::getReturnProtector() const {
-  return &RPL;
 }

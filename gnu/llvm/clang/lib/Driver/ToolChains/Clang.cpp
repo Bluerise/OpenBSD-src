@@ -1404,6 +1404,20 @@ static bool isSignedCharDefault(const llvm::Triple &Triple) {
   }
 }
 
+static bool isNoCommonDefault(const llvm::Triple &Triple) {
+  switch (Triple.getArch()) {
+  default:
+    if (Triple.isOSFuchsia())
+      return true;
+    return false;
+
+  case llvm::Triple::xcore:
+  case llvm::Triple::wasm32:
+  case llvm::Triple::wasm64:
+    return true;
+  }
+}
+
 static bool hasMultipleInvocations(const llvm::Triple &Triple,
                                    const ArgList &Args) {
   // Supported only on Darwin where we invoke the compiler multiple times
@@ -1905,8 +1919,7 @@ void Clang::AddPPCTargetArgs(const ArgList &Args,
         break;
       }
 
-      if ((T.isOSFreeBSD() && T.getOSMajorVersion() >= 13) ||
-          T.isOSOpenBSD() || T.isMusl())
+      if (T.isMusl() || (T.isOSFreeBSD() && T.getOSMajorVersion() >= 13))
         ABIName = "elfv2";
       else
         ABIName = "elfv1";
@@ -2350,11 +2363,6 @@ static void CollectArgsForIntegratedAssembler(Compilation &C,
         if (Value.startswith("-mhard-float")) {
           CmdArgs.push_back("-target-feature");
           CmdArgs.push_back("-soft-float");
-          continue;
-        }
-        if (Value.startswith("-mfix-loongson2f-btb")) {
-          CmdArgs.push_back("-mllvm");
-          CmdArgs.push_back("-fix-loongson2f-btb");
           continue;
         }
 
@@ -4413,19 +4421,6 @@ void Clang::ConstructJob(Compilation &C, const JobAction &JA,
     CmdArgs.push_back(A->getValue());
   }
 
-  if (Arg *A = Args.getLastArg(options::OPT_maix_struct_return,
-                               options::OPT_msvr4_struct_return)) {
-    if (TC.getArch() != llvm::Triple::ppc) {
-      D.Diag(diag::err_drv_unsupported_opt_for_target)
-          << A->getSpelling() << RawTriple.str();
-    } else if (A->getOption().matches(options::OPT_maix_struct_return)) {
-      CmdArgs.push_back("-maix-struct-return");
-    } else {
-      assert(A->getOption().matches(options::OPT_msvr4_struct_return));
-      CmdArgs.push_back("-msvr4-struct-return");
-    }
-  }
-
   if (Arg *A = Args.getLastArg(options::OPT_fpcc_struct_return,
                                options::OPT_freg_struct_return)) {
     if (TC.getArch() != llvm::Triple::x86) {
@@ -4470,12 +4465,9 @@ void Clang::ConstructJob(Compilation &C, const JobAction &JA,
       OFastEnabled ? options::OPT_Ofast : options::OPT_fstrict_aliasing;
   // We turn strict aliasing off by default if we're in CL mode, since MSVC
   // doesn't do any TBAA.
-  bool StrictAliasingDefault = !D.IsCLMode();
-  // We also turn off strict aliasing on OpenBSD.
-  if (getToolChain().getTriple().isOSOpenBSD())
-    StrictAliasingDefault = false;
+  bool TBAAOnByDefault = !D.IsCLMode();
   if (!Args.hasFlag(options::OPT_fstrict_aliasing, StrictAliasingAliasOption,
-                    options::OPT_fno_strict_aliasing, StrictAliasingDefault))
+                    options::OPT_fno_strict_aliasing, TBAAOnByDefault))
     CmdArgs.push_back("-relaxed-aliasing");
   if (!Args.hasFlag(options::OPT_fstruct_path_tbaa,
                     options::OPT_fno_struct_path_tbaa))
@@ -5175,8 +5167,7 @@ void Clang::ConstructJob(Compilation &C, const JobAction &JA,
                                       options::OPT_fno_strict_overflow)) {
     if (A->getOption().matches(options::OPT_fno_strict_overflow))
       CmdArgs.push_back("-fwrapv");
-  } else if (getToolChain().getTriple().isOSOpenBSD())
-    CmdArgs.push_back("-fwrapv");
+  }
 
   if (Arg *A = Args.getLastArg(options::OPT_freroll_loops,
                                options::OPT_fno_reroll_loops))
@@ -5193,49 +5184,8 @@ void Clang::ConstructJob(Compilation &C, const JobAction &JA,
                    false))
     CmdArgs.push_back(Args.MakeArgString("-mspeculative-load-hardening"));
 
+  RenderSSPOptions(TC, Args, CmdArgs, KernelOrKext);
   RenderTrivialAutoVarInitOptions(D, TC, Args, CmdArgs);
-
-  // -ret-protector
-  unsigned RetProtector = 1;
-  if (Arg *A = Args.getLastArg(options::OPT_fno_ret_protector,
-        options::OPT_fret_protector)) {
-    if (A->getOption().matches(options::OPT_fno_ret_protector))
-      RetProtector = 0;
-    else if (A->getOption().matches(options::OPT_fret_protector))
-      RetProtector = 1;
-  }
-
-  if (RetProtector &&
-      ((getToolChain().getArch() == llvm::Triple::x86_64) ||
-       (getToolChain().getArch() == llvm::Triple::mips64) ||
-       (getToolChain().getArch() == llvm::Triple::mips64el) ||
-       (getToolChain().getArch() == llvm::Triple::ppc) ||
-       (getToolChain().getArch() == llvm::Triple::ppc64) ||
-       (getToolChain().getArch() == llvm::Triple::ppc64le) ||
-       (getToolChain().getArch() == llvm::Triple::aarch64)) &&
-      !Args.hasArg(options::OPT_fno_stack_protector) &&
-      !Args.hasArg(options::OPT_pg)) {
-    CmdArgs.push_back(Args.MakeArgString("-D_RET_PROTECTOR"));
-    CmdArgs.push_back(Args.MakeArgString("-ret-protector"));
-    // Consume the stack protector arguments to prevent warning
-    Args.getLastArg(options::OPT_fstack_protector_all,
-        options::OPT_fstack_protector_strong,
-        options::OPT_fstack_protector,
-        options::OPT__param); // ssp-buffer-size
-  } else {
-    // If we're not using retguard, then do the usual stack protector
-    RenderSSPOptions(getToolChain(), Args, CmdArgs, KernelOrKext);
-  }
-
-  // -fixup-gadgets
-  if (Arg *A = Args.getLastArg(options::OPT_fno_fixup_gadgets,
-                               options::OPT_ffixup_gadgets)) {
-    CmdArgs.push_back(Args.MakeArgString(Twine("-mllvm")));
-    if (A->getOption().matches(options::OPT_fno_fixup_gadgets))
-      CmdArgs.push_back(Args.MakeArgString(Twine("-x86-fixup-gadgets=false")));
-    else if (A->getOption().matches(options::OPT_ffixup_gadgets))
-      CmdArgs.push_back(Args.MakeArgString(Twine("-x86-fixup-gadgets=true")));
-  }
 
   // Translate -mstackrealign
   if (Args.hasFlag(options::OPT_mstackrealign, options::OPT_mno_stackrealign,
@@ -5624,9 +5574,11 @@ void Clang::ConstructJob(Compilation &C, const JobAction &JA,
   if (!Args.hasFlag(options::OPT_Qy, options::OPT_Qn, true))
     CmdArgs.push_back("-Qn");
 
-  // -fno-common is the default, set -fcommon only when that flag is set.
-  if (Args.hasFlag(options::OPT_fcommon, options::OPT_fno_common, false))
-    CmdArgs.push_back("-fcommon");
+  // -fcommon is the default unless compiling kernel code or the target says so
+  bool NoCommonDefault = KernelOrKext || isNoCommonDefault(RawTriple);
+  if (!Args.hasFlag(options::OPT_fcommon, options::OPT_fno_common,
+                    !NoCommonDefault))
+    CmdArgs.push_back("-fno-common");
 
   // -fsigned-bitfields is default, and clang doesn't yet support
   // -funsigned-bitfields.
@@ -5722,18 +5674,6 @@ void Clang::ConstructJob(Compilation &C, const JobAction &JA,
                                      options::OPT_fno_rewrite_imports, false);
   if (RewriteImports)
     CmdArgs.push_back("-frewrite-imports");
-
-  // Disable some builtins on OpenBSD because they are just not
-  // right...
-  if (getToolChain().getTriple().isOSOpenBSD()) {
-    CmdArgs.push_back("-fno-builtin-malloc");
-    CmdArgs.push_back("-fno-builtin-calloc");
-    CmdArgs.push_back("-fno-builtin-realloc");
-    CmdArgs.push_back("-fno-builtin-valloc");
-    CmdArgs.push_back("-fno-builtin-free");
-    CmdArgs.push_back("-fno-builtin-strdup");
-    CmdArgs.push_back("-fno-builtin-strndup");
-  }
 
   // Enable rewrite includes if the user's asked for it or if we're generating
   // diagnostics.

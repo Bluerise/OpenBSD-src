@@ -35,7 +35,6 @@ add_llvm_target(PowerPCCodeGen
   PPCMachineScheduler.cpp
   PPCMIPeephole.cpp
   PPCRegisterInfo.cpp
-  PPCReturnProtectorLowering.cpp
   PPCQPXLoadSplat.cpp
   PPCSubtarget.cpp
   PPCTargetMachine.cpp

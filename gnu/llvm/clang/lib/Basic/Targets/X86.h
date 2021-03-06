@@ -123,7 +123,6 @@ class LLVM_LIBRARY_VISIBILITY X86TargetInfo : public TargetInfo {
   bool HasMOVDIR64B = false;
   bool HasPTWRITE = false;
   bool HasINVPCID = false;
-  bool HasSaveArgs = false;
   bool HasENQCMD = false;
 
 protected:
@@ -148,7 +147,6 @@ public:
       : TargetInfo(Triple) {
     LongDoubleFormat = &llvm::APFloat::x87DoubleExtended();
     AddrSpaceMap = &X86AddrSpaceMap;
-    HasStrictFP = true;
   }
 
   const char *getLongDoubleMangling() const override {

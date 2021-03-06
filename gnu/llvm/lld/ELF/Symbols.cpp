@@ -38,7 +38,6 @@ std::string toELFString(const Archive::Symbol &b) {
 
 namespace elf {
 Defined *ElfSym::bss;
-Defined *ElfSym::data;
 Defined *ElfSym::etext1;
 Defined *ElfSym::etext2;
 Defined *ElfSym::edata1;

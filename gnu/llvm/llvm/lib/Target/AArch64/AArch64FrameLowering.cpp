@@ -116,7 +116,6 @@
 #include "AArch64InstrInfo.h"
 #include "AArch64MachineFunctionInfo.h"
 #include "AArch64RegisterInfo.h"
-#include "AArch64ReturnProtectorLowering.h"
 #include "AArch64StackOffset.h"
 #include "AArch64Subtarget.h"
 #include "AArch64TargetMachine.h"
@@ -2366,10 +2365,6 @@ void AArch64FrameLowering::determineCalleeSaves(MachineFunction &MF,
                                 ? RegInfo->getBaseRegister()
                                 : (unsigned)AArch64::NoRegister;
 
-  if (MFI.hasReturnProtectorRegister() && MFI.getReturnProtectorNeedsStore()) {
-    SavedRegs.set(MFI.getReturnProtectorRegister());
-  }
-
   unsigned ExtraCSSpill = 0;
   // Figure out which callee-saved registers to save/restore.
   for (unsigned i = 0; CSRegs[i]; ++i) {
@@ -2699,8 +2694,4 @@ unsigned AArch64FrameLowering::getWinEHFuncletFrameSize(
   // This is the amount of stack a funclet needs to allocate.
   return alignTo(CSSize + MF.getFrameInfo().getMaxCallFrameSize(),
                  getStackAlignment());
-}
-
-const ReturnProtectorLowering *AArch64FrameLowering::getReturnProtector() const {
-  return &RPL;
 }

@@ -420,9 +420,6 @@ struct ElfSym {
   // __bss_start
   static Defined *bss;
 
-  // __data_start
-  static Defined *data;
-
   // etext and _etext
   static Defined *etext1;
   static Defined *etext2;

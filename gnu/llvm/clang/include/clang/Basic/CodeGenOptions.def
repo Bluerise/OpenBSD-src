@@ -58,8 +58,6 @@ CODEGENOPT(DisableLLVMPasses , 1, 0) ///< Don't run any LLVM IR passes to get
                                      ///< frontend.
 CODEGENOPT(DisableLifetimeMarkers, 1, 0) ///< Don't emit any lifetime markers
 CODEGENOPT(DisableO0ImplyOptNone , 1, 0) ///< Don't annonate function with optnone at O0
-CODEGENOPT(ExperimentalStrictFloatingPoint, 1, 0) ///< Enables the new, experimental
-                                                  ///< strict floating point.
 CODEGENOPT(ExperimentalNewPassManager, 1, 0) ///< Enables the new, experimental
                                              ///< pass manager.
 CODEGENOPT(DebugPassManager, 1, 0) ///< Prints debug information for the new
@@ -305,9 +303,6 @@ VALUE_CODEGENOPT(NumRegisterParameters, 32, 0)
 
 /// The lower bound for a buffer to be considered for stack protection.
 VALUE_CODEGENOPT(SSPBufferSize, 32, 0)
-
-/// Whether to use return protectors
-CODEGENOPT(ReturnProtector, 1, 0)
 
 /// The kind of generated debug info.
 ENUM_CODEGENOPT(DebugInfo, codegenoptions::DebugInfoKind, 3, codegenoptions::NoDebugInfo)

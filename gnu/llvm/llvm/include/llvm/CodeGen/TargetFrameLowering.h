@@ -14,7 +14,6 @@
 #define LLVM_CODEGEN_TARGETFRAMELOWERING_H
 
 #include "llvm/CodeGen/MachineBasicBlock.h"
-#include "llvm/CodeGen/ReturnProtectorLowering.h"
 #include "llvm/ADT/StringSwitch.h"
 #include <utility>
 #include <vector>
@@ -178,10 +177,6 @@ public:
                             MachineBasicBlock &MBB) const = 0;
   virtual void emitEpilogue(MachineFunction &MF,
                             MachineBasicBlock &MBB) const = 0;
-
-  virtual const ReturnProtectorLowering *getReturnProtector() const {
-    return nullptr;
-  }
 
   /// Replace a StackProbe stub (if any) with the actual probe code inline
   virtual void inlineStackProbe(MachineFunction &MF,
