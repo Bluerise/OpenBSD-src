@@ -1804,6 +1804,7 @@
 ./usr/lib/clang/11.1.0/include/__wmmintrin_pclmul.h
 ./usr/lib/clang/11.1.0/include/adxintrin.h
 ./usr/lib/clang/11.1.0/include/ammintrin.h
+./usr/lib/clang/11.1.0/include/amxintrin.h
 ./usr/lib/clang/11.1.0/include/avx2intrin.h
 ./usr/lib/clang/11.1.0/include/avx512bf16intrin.h
 ./usr/lib/clang/11.1.0/include/avx512bitalgintrin.h
@@ -1834,6 +1835,7 @@
 ./usr/lib/clang/11.1.0/include/avxintrin.h
 ./usr/lib/clang/11.1.0/include/bmi2intrin.h
 ./usr/lib/clang/11.1.0/include/bmiintrin.h
+./usr/lib/clang/11.1.0/include/cet.h
 ./usr/lib/clang/11.1.0/include/cetintrin.h
 ./usr/lib/clang/11.1.0/include/cldemoteintrin.h
 ./usr/lib/clang/11.1.0/include/clflushoptintrin.h
@@ -1867,6 +1869,7 @@
 ./usr/lib/clang/11.1.0/include/ptwriteintrin.h
 ./usr/lib/clang/11.1.0/include/rdseedintrin.h
 ./usr/lib/clang/11.1.0/include/rtmintrin.h
+./usr/lib/clang/11.1.0/include/serializeintrin.h
 ./usr/lib/clang/11.1.0/include/sgxintrin.h
 ./usr/lib/clang/11.1.0/include/shaintrin.h
 ./usr/lib/clang/11.1.0/include/smmintrin.h
@@ -1876,11 +1879,13 @@
 ./usr/lib/clang/11.1.0/include/tbmintrin.h
 ./usr/lib/clang/11.1.0/include/tgmath.h
 ./usr/lib/clang/11.1.0/include/tmmintrin.h
+./usr/lib/clang/11.1.0/include/tsxldtrkintrin.h
 ./usr/lib/clang/11.1.0/include/unwind.h
 ./usr/lib/clang/11.1.0/include/vaesintrin.h
 ./usr/lib/clang/11.1.0/include/varargs.h
 ./usr/lib/clang/11.1.0/include/vpclmulqdqintrin.h
 ./usr/lib/clang/11.1.0/include/waitpkgintrin.h
+./usr/lib/clang/11.1.0/include/wasm_simd128.h
 ./usr/lib/clang/11.1.0/include/wbnoinvdintrin.h
 ./usr/lib/clang/11.1.0/include/wmmintrin.h
 ./usr/lib/clang/11.1.0/include/x86intrin.h
